@@ -16,6 +16,6 @@ public class BoardDto {
 	
 	String description;
 	
-	// 나중에 관리자 추가하기
+	int adminid;
 	
 }

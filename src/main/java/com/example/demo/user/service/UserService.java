@@ -5,7 +5,9 @@ import com.example.demo.user.entity.User;
 
 public interface UserService {
 	
+	boolean register(UserDto dto);
 	
+	UserDto read(int id);
 	
 	default UserDto entityToDto (User user) {
 		

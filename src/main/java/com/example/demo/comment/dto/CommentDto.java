@@ -3,10 +3,8 @@ package com.example.demo.comment.dto;
 import java.time.LocalDateTime;
 
 
-import jakarta.persistence.Entity;
 import lombok.*;
 
-@Entity
 @Getter
 @Setter
 @AllArgsConstructor

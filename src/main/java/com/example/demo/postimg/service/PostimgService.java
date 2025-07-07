@@ -4,7 +4,7 @@ import com.example.demo.post.entity.Post;
 import com.example.demo.postimg.dto.PostimgDto;
 import com.example.demo.postimg.entity.Postimg;
 
-public interface PostService {
+public interface PostimgService {
 	
 	
 	default PostimgDto entityToDto(Postimg postimg) {

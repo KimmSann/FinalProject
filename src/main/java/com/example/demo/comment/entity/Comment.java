@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.CreatedDate;
 
-import com.example.demo.board.entity.Board;
 import com.example.demo.post.entity.Post;
 import com.example.demo.user.entity.User;
 

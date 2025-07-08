@@ -21,10 +21,10 @@ public class UserTest {
 	void 유저추가() {
 		
 		UserDto user = UserDto.builder()
-				.name("둘리")
-				.email("hyunjae09122@naver.com")
+				.name("도우너")
+				.email("testmail23@gmail.com")
 				.password("1234")
-				.nickname("둘리 찐")
+				.nickname("또 울어")
 				.profileimg("아직없다")
 				.role("사용자")
 				.build();

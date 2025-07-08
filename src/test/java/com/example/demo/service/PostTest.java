@@ -22,13 +22,10 @@ public class PostTest {
 	@Test
 	void 게시물등록() {
 		PostDto dto = PostDto.builder()
-				.title("만나서반가워요")
-				.content("처음인사드립니다???")
-				.viewcount(0)
-				.likecount(0)
-				.unlikecount(0)
-				.boardid(2)		// 카테고리를 묶어서 출력
-				.userid(2)
+				.title("진짜 큐엔에이")
+				.content("ㅎㅇㅎㅇ 아니? 안 ㅎㅇㅎㅇ")
+				.boardid(1)
+				.userid(1)
 				.build();
 		
 		

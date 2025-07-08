@@ -20,7 +20,7 @@ public class AdminTest {
 	@Test
 	void 관리자등록() {
 		AdminDto dto = AdminDto.builder()
-				.managername("관리자형 둘리")
+				.managername("관리자")
 				.build();
 		
 		boolean access = service.register(dto);

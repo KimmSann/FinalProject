@@ -26,10 +26,11 @@ public class BoardTest {
 //				.adminid(2)   // 관리자가 없으니 에러남
 //				.build();
 
+		// 오늘의 글 같은 건 나중에 정렬할 때 필요 서비스에 추가로 해야할 듯
 		
 		BoardDto dto = BoardDto.builder()
-				.boardname("Q&A")
-				.description("질의응답을 해야해요")
+				.boardname("자유게시판")
+				.description("자유롭게 대화하세요")
 				.adminid(1)
 				.build();
 		

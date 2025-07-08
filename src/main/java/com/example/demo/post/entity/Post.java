@@ -47,13 +47,16 @@ public class Post {
 	String content;
 	
 	@Column
-	int viewcount;
+	@Builder.Default
+	int viewcount = 0;
 	
 	@Column
-	int likecount;
+	@Builder.Default
+	int likecount = 0;
 	
 	@Column
-	int unlikecount;
+	@Builder.Default
+	int unlikecount = 0;
 
     @CreatedDate
     LocalDateTime creatdate;

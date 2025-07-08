@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>OKKY Clone Main</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { padding-top: 70px; }
+    .post-list { margin-bottom: 2rem; }
+    .sidebar { background-color: #f8f9fa; padding: 1rem; border-radius: 0.5rem; }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">With Game</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+        <!-- 추후 추가 예정 -->
+          <li class="nav-item"><a class="nav-link" href="#">Q&A</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">자유게시판</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">공지사항</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">로그인</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">회원가입</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="row">
+      <!-- 출력을 하기 위해 반복 -->
+      <div class="col-md-8"  th:each="dto : ${boardlist}">
+      
+        <h2>[[ ${ dto.boardname } ]]</h2>	<!-- 보드의 이름을 넣기 -->
+        <div class="list-group post-list">
+          <a href="#" class="list-group-item list-group-item-action" 
+          th:each="list : ${postlist}"
+          th:if="${list.boardid} == ${dto.boardid}">
+            [[ ${ list.title } ]]
+          </a>
+        </div>
+        
+        
+      </div>
+
+      <!-- Sidebar -->
+      <!-- 추구 좋아요가 많은 순으로 정렬 예정 -->
+      <div class="col-md-4">
+        <div class="sidebar">
+          <h4>인기글</h4>
+          <ul class="list-unstyled">
+            <li><a href="#">이부분은 나중에 좋아요순으로 정렬할겁니다.</a></li>
+            <li><a href="#">취업 준비 꿀팁</a></li>
+            <li><a href="#">면접 질문 모음</a></li>
+          </ul>
+
+          <h4 class="mt-4">태그</h4>
+          <span class="badge bg-secondary">Java</span>
+          <span class="badge bg-secondary">Spring</span>
+          <span class="badge bg-secondary">React</span>
+          <span class="badge bg-secondary">취업</span>
+          <span class="badge bg-secondary">태그 부분도 나중에 수정할겁니다.</span>          
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="text-center mt-5 mb-3">
+    <small>&copy; 2025 OKKY Clone. All rights reserved.</small>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

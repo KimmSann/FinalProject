@@ -17,6 +17,7 @@ public interface BoardService {
 	
 	
 	
+	
 	default BoardDto entityToDto(Board board) {
 		
 		int adminId = board.getAdminid().getAdminid();

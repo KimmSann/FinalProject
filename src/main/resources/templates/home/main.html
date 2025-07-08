@@ -41,6 +41,7 @@
           <a href="#" class="list-group-item list-group-item-action" 
           th:each="list : ${postlist}"
           th:if="${list.boardid} == ${dto.boardid}">
+          <!-- 자바스크립트로 처리할까? -->
             [[ ${ list.title } ]]
           </a>
         </div>

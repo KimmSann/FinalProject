@@ -4,12 +4,14 @@ import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.example.demo.board.entity.Board;
 import com.example.demo.user.entity.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,6 +32,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Builder
+@EntityListeners(value = { AuditingEntityListener.class }) 
 @Table(name = "tbl_post")
 public class Post {
 
@@ -48,6 +51,9 @@ public class Post {
 	
 	@Column
 	int likecount;
+	
+	@Column
+	int unlikecount;
 
     @CreatedDate
     LocalDateTime creatdate;

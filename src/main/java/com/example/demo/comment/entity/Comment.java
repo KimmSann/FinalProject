@@ -3,12 +3,14 @@ package com.example.demo.comment.entity;
 import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.example.demo.post.entity.Post;
 import com.example.demo.user.entity.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -24,6 +26,7 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 @Builder
+@EntityListeners(value = { AuditingEntityListener.class }) 
 @Table(name = "tbl_comment")
 public class Comment {
 	
@@ -39,9 +42,9 @@ public class Comment {
 	
 	@ManyToOne
 	@JoinColumn(name = "userid")
-	User userid;
+	User user;
 	
 	@ManyToOne
 	@JoinColumn(name = "postid")
-	Post postid;	
+	Post post;	
 }

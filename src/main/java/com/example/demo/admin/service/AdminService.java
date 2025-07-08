@@ -5,6 +5,10 @@ import com.example.demo.admin.entity.Admin;
 
 public interface AdminService {
 	
+	boolean register(AdminDto dto);
+	
+	AdminDto read(int id);
+	
 	default AdminDto entityToDto(Admin admin) {
 		
 		AdminDto dto = AdminDto.builder()

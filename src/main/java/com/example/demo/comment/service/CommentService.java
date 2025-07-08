@@ -1,5 +1,7 @@
 package com.example.demo.comment.service;
 
+import java.util.List;
+
 import com.example.demo.comment.dto.CommentDto;
 import com.example.demo.comment.entity.Comment;
 import com.example.demo.post.entity.Post;
@@ -7,13 +9,17 @@ import com.example.demo.user.entity.User;
 
 public interface CommentService {
 	
+	int register (CommentDto dto);
 	
+	List<CommentDto> getList(int postId);
+	
+	boolean remove(int commentId);
 	
 	
 	default CommentDto entityToDto(Comment comment) {
 		
-		int userId = comment.getUserid().getUserid();
-		int postId = comment.getPostid().getPostid();
+		int userId = comment.getUser().getUserid();
+		int postId = comment.getPost().getPostid();
 		
 		CommentDto dto = CommentDto.builder()
 				.commentid(comment.getCommentid())
@@ -40,8 +46,8 @@ public interface CommentService {
 				.commentid(dto.getCommentid())
 				.content(dto.getContent())
 				.createdate(dto.getCreatedate())
-				.userid(userid)
-				.postid(postid)
+				.user(userid)
+				.post(postid)
 				.build();
 		
 		return comment;

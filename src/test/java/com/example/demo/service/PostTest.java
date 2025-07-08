@@ -1,0 +1,69 @@
+package com.example.demo.service;
+
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import com.example.demo.post.dto.PostDto;
+import com.example.demo.post.repository.PostRepository;
+import com.example.demo.post.service.PostService;
+
+@SpringBootTest
+public class PostTest {
+	
+	@Autowired
+	PostService service;
+	
+	@Autowired
+	PostRepository repository;
+	
+	@Test
+	void 게시물등록() {
+		PostDto dto = PostDto.builder()
+				.title("만나서반가워요")
+				.content("처음인사드립니다???")
+				.viewcount(0)
+				.likecount(0)
+				.unlikecount(0)
+				.boardid(2)		// 카테고리를 묶어서 출력
+				.userid(2)
+				.build();
+		
+		
+		int num = service.register(dto);
+		
+		System.out.println(num);
+	}
+	
+//	@Test
+//	void 게시물읽기() {
+//		PostDto dto = service.read(2);
+//		System.out.println(dto);
+//	}
+	
+	@Test
+	void 게시물리스트출력() {
+		List<PostDto> list = service.getList();
+	    for (PostDto dto : list) {
+	        System.out.println(dto);
+	    }
+	}
+	
+	@Test
+	void 게시물삭제() {
+		boolean result = service.remove(2);
+		
+		if(result) {
+			System.out.println("삭제가 성공되었습니다.");
+		}
+		else {
+			System.out.println("삭제가 실패되었습니다.");
+		}
+	}
+	
+	// 좋아요와 조회수는 컨트롤러 만들 때 하기
+	
+	
+}

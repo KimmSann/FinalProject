@@ -22,6 +22,8 @@ public class PostDto {
 	
 	int likecount;
 	
+	int unlikecount;
+	
     LocalDateTime creatdate;
 
     LocalDateTime updatdate;

@@ -1,11 +1,35 @@
 package com.example.demo.post.service;
 
+import java.util.List;
+
 import com.example.demo.board.entity.Board;
 import com.example.demo.post.dto.PostDto;
 import com.example.demo.post.entity.Post;
 import com.example.demo.user.entity.User;
 
 public interface PostService {
+	
+	// 기본 CRUD
+	
+	int register(PostDto dto);
+	
+	PostDto read(int postId);
+	
+	// 게시물 목록 조회
+	List<PostDto> getList();
+	
+	boolean modify(PostDto dto);
+	
+	boolean remove(int postId);
+	
+	// 조회수 싫어요, 좋아요 수 관리
+	
+	int viewcount(int postId);
+	
+	int likePost(int postId);
+	
+	int unlikePost(int postId);
+	
 	
 	default PostDto entityToDto(Post post) {
 		
@@ -18,6 +42,7 @@ public interface PostService {
 				.content(post.getContent())
 				.viewcount(post.getViewcount())
 				.likecount(post.getLikecount())
+				.unlikecount(post.getUnlikecount())
 				.creatdate(post.getCreatdate())
 				.updatdate(post.getUpdatdate())
 				.boardid(boardId)
@@ -44,6 +69,7 @@ public interface PostService {
 				.content(dto.getContent())
 				.viewcount(dto.getViewcount())
 				.likecount(dto.getLikecount())
+				.unlikecount(dto.getUnlikecount())
 				.creatdate(dto.getCreatdate())
 				.updatdate(dto.getUpdatdate())
 				.boardid(boardId)

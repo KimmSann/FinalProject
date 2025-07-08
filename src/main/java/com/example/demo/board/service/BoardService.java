@@ -1,10 +1,20 @@
 package com.example.demo.board.service;
 
+import java.util.List;
+
 import com.example.demo.admin.entity.Admin;
 import com.example.demo.board.dto.BoardDto;
 import com.example.demo.board.entity.Board;
 
 public interface BoardService {
+	
+	int register (BoardDto dto);
+	
+	List<BoardDto> getList();  // 전체 게시판 목록
+	
+	boolean remove(int no);
+	
+	
 	
 	
 	default BoardDto entityToDto(Board board) {

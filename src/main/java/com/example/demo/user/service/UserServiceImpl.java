@@ -17,30 +17,29 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public boolean register(UserDto dto) {
-		
-		try {
-			int id = dto.getUserid();
-			UserDto getDto = read(id);
-			
-			if(getDto != null) {
-				System.out.println("사용중인 아이디 입니다.");
-				return false;
-			}
-			else {
-				User entity = dtoToEntity(getDto);
-				
-				// 여기에 인코딩 코드 넣기
-				
-				repository.save(entity);
-				System.out.println("저장 완료");
-				return true;
-			}
-		}
-		catch (Exception e) {
-			System.out.println("ERROR : " + e);
-			return false;
-		}
+	    try {
+	        // 1️⃣ 이메일로 중복 확인
+	        Optional<User> existingUser = repository.findByEmail(dto.getEmail());
+	        if (existingUser.isPresent()) {
+	            System.out.println("이미 사용 중인 이메일입니다.");
+	            return false;
+	        }
+
+	        // 2️. DTO → Entity
+	        User entity = dtoToEntity(dto);
+
+	        // 3️. 패스워드 인코딩 등 추가
+
+	        // 4️. 저장
+	        repository.save(entity);
+	        System.out.println("저장 완료");
+	        return true;
+	    } catch (Exception e) {
+	        System.out.println("ERROR : " + e);
+	        return false;
+	    }
 	}
+
 
 	@Override
 	public UserDto read(int id) {

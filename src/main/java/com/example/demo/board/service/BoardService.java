@@ -14,6 +14,8 @@ public interface BoardService {
 	
 	boolean remove(int no);
 	
+	BoardDto getBoardInfo(int boardId);
+	
 	
 	
 	

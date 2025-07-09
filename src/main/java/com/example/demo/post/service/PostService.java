@@ -1,6 +1,10 @@
 package com.example.demo.post.service;
 
+
 import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.example.demo.board.entity.Board;
 import com.example.demo.post.dto.PostDto;
@@ -17,6 +21,9 @@ public interface PostService {
 	
 	// 게시물 목록 조회
 	List<PostDto> getList();
+	
+	// 카테고리별 게시물 조회
+	Page<PostDto> category(int boardId, Pageable pageable);
 	
 	boolean modify(PostDto dto);
 	

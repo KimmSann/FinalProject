@@ -31,5 +31,7 @@ public class PostDto {
     int boardid;
     
     int userid;
+    
+    String nickname;
 	
 }

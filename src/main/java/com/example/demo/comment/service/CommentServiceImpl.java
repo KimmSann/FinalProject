@@ -10,6 +10,8 @@ import com.example.demo.comment.dto.CommentDto;
 import com.example.demo.comment.entity.Comment;
 import com.example.demo.comment.repository.CommentRepository;
 import com.example.demo.post.entity.Post;
+import com.example.demo.user.dto.UserDto;
+import com.example.demo.user.service.UserService;
 
 @Service
 public class CommentServiceImpl implements CommentService{
@@ -17,6 +19,9 @@ public class CommentServiceImpl implements CommentService{
 
 	@Autowired
 	CommentRepository repository;
+	
+	@Autowired
+	UserService userService;
 
 
 	@Override
@@ -42,6 +47,12 @@ public class CommentServiceImpl implements CommentService{
 		for (Comment entity : entityList) {
 			CommentDto dto = entityToDto(entity);
 			dtoList.add(dto);
+		}
+		
+		for(CommentDto entity : dtoList) {
+			int userId = entity.getUserid();
+			UserDto userDto = userService.read(userId);
+			entity.setNickname(userDto.getNickname());
 		}
 		
 		return dtoList;

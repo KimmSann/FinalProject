@@ -22,4 +22,6 @@ public class CommentDto {
 	int userid;
 	
 	int postid;
+	
+	String nickname;
 }

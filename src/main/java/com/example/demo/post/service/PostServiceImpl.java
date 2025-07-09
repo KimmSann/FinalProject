@@ -6,11 +6,17 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import com.example.demo.comment.repository.CommentRepository;
+
+import com.example.demo.board.entity.Board;
 import com.example.demo.post.dto.PostDto;
 import com.example.demo.post.entity.Post;
 import com.example.demo.post.repository.PostRepository;
+import com.example.demo.user.dto.UserDto;
+import com.example.demo.user.service.UserService;
+
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -18,7 +24,8 @@ public class PostServiceImpl implements PostService {
 	@Autowired 
 	PostRepository repository;
 
-
+	@Autowired
+	UserService userService;
 	
 
 	@Override
@@ -65,23 +72,10 @@ public class PostServiceImpl implements PostService {
 	}
 
 	
-	// 나중에 페이징처리 할 예정
-	@Override
-	public List<PostDto> getList() {
-		
-		List<Post> result = repository.findAll();
-		List<PostDto> list = new ArrayList<>();
-		
-		list = result.stream()
-				.map(entity -> entityToDto(entity))
-				.collect(Collectors.toList());
-		
-		return list;
-	}
 
 	@Override
 	public boolean modify(PostDto dto) {
-		// postimg때문에 나중에 추가 예정
+		
 		return false;
 	}
 
@@ -151,6 +145,51 @@ public class PostServiceImpl implements PostService {
 
 	    return 0;
 	}
+
+
+	@Override
+	public List<PostDto> getList() {
+		List<Post> result = repository.findAll();
+		List<PostDto> list = new ArrayList<>();
+		
+		list = result.stream()
+				.map(entity -> entityToDto(entity))
+				.collect(Collectors.toList());
+		
+		return list;
+	}
+
+
+
+	@Override
+	public Page<PostDto> category(int boardId, Pageable pageable) {
+		
+		Board board = Board.builder().boardid(boardId).build();
+		Page<Post> entityPage  = repository.findByBoardid(board, pageable);
+		
+		Page<PostDto> dtopage = entityPage.map(entity -> {
+			
+			PostDto dto = entityToDto(entity);
+			
+			int userId = dto.getUserid();
+			UserDto userDto = userService.read(userId);
+			dto.setNickname(userDto.getNickname());
+			
+			return dto;
+			
+		});
+		
+		
+		return dtopage;
+	}
+
+
+//    PostDto dto = entityToDto(entity);
+//
+//    // 작성자 닉네임 추가
+//    int userId = dto.getUserid();
+//    UserDto userDto = userService.read(userId);
+//    dto.setNickname(userDto.getNickname());
 
 
 }

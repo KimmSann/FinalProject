@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
+import com.example.demo.post.repository.PostRepository;
+import com.example.demo.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +16,17 @@ import com.example.demo.board.repository.BoardRepository;
 @Service
 public class BoardServiceImpl implements BoardService{
 
+    private final UserRepository userRepository;
+
+    private final PostRepository postRepository;
+
 	@Autowired
 	BoardRepository repository;
+
+    BoardServiceImpl(PostRepository postRepository, UserRepository userRepository) {
+        this.postRepository = postRepository;
+        this.userRepository = userRepository;
+    }
 	
 	// 외부에서 데이터 받음
 	@Override
@@ -64,6 +74,20 @@ public class BoardServiceImpl implements BoardService{
 				.collect(Collectors.toList());
 		
 		return list;
+	}
+
+	@Override
+	public BoardDto getBoardInfo(int boardId) {
+		Optional<Board> optional = repository.findById(boardId);
+		
+		if(optional.isPresent()) {
+			Board entity = optional.get();
+			BoardDto dto = entityToDto(entity);			
+			return dto;
+		}
+		else {
+			return null;			
+		}
 	}
 	
 }

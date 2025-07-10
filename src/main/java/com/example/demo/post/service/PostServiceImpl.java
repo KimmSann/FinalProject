@@ -1,4 +1,4 @@
-package com.example.demo.post.service;
+	package com.example.demo.post.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +16,7 @@ import com.example.demo.post.entity.Post;
 import com.example.demo.post.repository.PostRepository;
 import com.example.demo.user.dto.UserDto;
 import com.example.demo.user.service.UserService;
+import com.example.demo.util.S3FileUtil;
 
 
 @Service
@@ -27,6 +28,9 @@ public class PostServiceImpl implements PostService {
 	@Autowired
 	UserService userService;
 	
+	// aws s3에 사진 저장
+	@Autowired
+	S3FileUtil fileUtil;
 
 	@Override
 	public int register(PostDto dto) {
@@ -37,12 +41,11 @@ public class PostServiceImpl implements PostService {
 			// boardId랑 어떻게 연결해야할듯 
 			Post entity = dtoToEntity(dto);
 			
+			//String imgPath = fileUtil.fileUpload(dto.get)
+			
 			repository.save(entity);
-			int newPost = entity.getPostid();
 			
-			System.out.println(newPost);
-			
-			return newPost;
+			return entity.getPostid();
 			
 		} catch (Exception e) {
 			System.out.println("ERROR : " + e);

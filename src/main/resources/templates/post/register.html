@@ -35,30 +35,37 @@
     <h2 class="mb-4">글 작성하기</h2>
     <!-- 나중에 이미지 저장을 위한 enctype="multipart/form-data" 추가 나중에 -->
 	<!-- 글 작성 폼 시작 -->
-	<form action="/post/register" method="post">
-	  <!-- 게시판 선택 -->
-	  <div class="mb-3">
-	    <label for="boardId" class="form-label">게시판 선택</label>
-	    <select class="form-select" id="boardId" name="boardId" required>
-	      <option value="" disabled selected>게시판을 선택하세요</option>
-	      <option value="1">Q&A</option>
-	      <option value="2">자유게시판</option>
-	    </select>
-	  </div>
-	
-	  <div class="mb-3">
-	    <label for="title" class="form-label">제목</label>
-	    <input type="text" class="form-control" id="title" name="title" placeholder="제목을 입력하세요" required>
-	  </div>
-	
-	  <div class="mb-3">
-	    <label for="content" class="form-label">내용</label>
-	    <textarea class="form-control" id="content" name="content" placeholder="내용을 입력하세요" required></textarea>
-	  </div>
-	
-	  <button type="submit" class="btn btn-primary">등록</button>
-	  <button type="button" class="btn btn-secondary" onclick="history.back()">취소</button>
-	</form>
+		<form action="/post/register" method="post" enctype="multipart/form-data">
+		  <!-- 게시판 선택 -->
+		  <div class="mb-3">
+		    <label for="boardId" class="form-label">게시판 선택</label>
+		    <select class="form-select" id="boardId" name="boardId" required>
+		      <option value="" disabled selected>게시판을 선택하세요</option>
+		      <option value="1">Q&A</option>
+		      <option value="2">자유게시판</option>
+		    </select>
+		  </div>
+		
+		  <div class="mb-3">
+		    <label for="title" class="form-label">제목</label>
+		    <input type="text" class="form-control" id="title" name="title" placeholder="제목을 입력하세요" required>
+		  </div>
+		
+		  <div class="mb-3">
+		    <label for="content" class="form-label">내용</label>
+		    <textarea class="form-control" id="content" name="content" placeholder="내용을 입력하세요" required></textarea>
+		  </div>
+		
+		  <!-- 이미지 업로드 필드 추가 -->
+		  <div class="mb-3">
+		    <label for="files" class="form-label">이미지 첨부</label>
+		    <input class="form-control" type="file" id="files" name="files" multiple>
+		    <small class="form-text text-muted">이미지를 하나 이상 선택할 수 있습니다.</small>
+		  </div>
+		
+		  <button type="submit" class="btn btn-primary">등록</button>
+		  <button type="button" class="btn btn-secondary" onclick="history.back()">취소</button>
+		</form>
 	<!-- 글 작성 폼 끝 -->
 
   </div>

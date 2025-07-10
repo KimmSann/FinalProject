@@ -38,6 +38,8 @@ public class HomeController {
 	            .collect(Collectors.toList());
 	        boardPostMap.put(board.getBoardid(), posts);
 	    }
+	    
+	    // 위와 비슷하게 좋아요순으로 정렬한 값 추출하기
 
 	    model.addAttribute("boardlist", boardlist);
 	    model.addAttribute("boardPostMap", boardPostMap);

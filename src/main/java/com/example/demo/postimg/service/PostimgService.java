@@ -1,10 +1,19 @@
 package com.example.demo.postimg.service;
 
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import com.example.demo.post.entity.Post;
 import com.example.demo.postimg.dto.PostimgDto;
 import com.example.demo.postimg.entity.Postimg;
 
 public interface PostimgService {
+	
+	void savePostImage(int postId, MultipartFile[] file);
+	
+	List<PostimgDto> getPostImages(int postId);
+	
 	
 	
 	default PostimgDto entityToDto(Postimg postimg) {

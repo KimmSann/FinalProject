@@ -44,6 +44,8 @@ public class HomeController {
 	    model.addAttribute("boardlist", boardlist);
 	    model.addAttribute("boardPostMap", boardPostMap);
 	    return "home/main";
+	    
+	    // 테스트
 	}
 
 

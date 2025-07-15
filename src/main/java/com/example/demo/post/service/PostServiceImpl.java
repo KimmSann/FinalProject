@@ -1,4 +1,4 @@
-	package com.example.demo.post.service;
+package com.example.demo.post.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import com.example.demo.board.entity.Board;
 import com.example.demo.post.dto.PostDto;
 import com.example.demo.post.entity.Post;
@@ -21,7 +20,6 @@ import com.example.demo.util.S3FileUtil;
 
 @Service
 public class PostServiceImpl implements PostService {
-
 	@Autowired 
 	PostRepository repository;
 
@@ -31,6 +29,7 @@ public class PostServiceImpl implements PostService {
 	// aws s3에 사진 저장
 	@Autowired
 	S3FileUtil fileUtil;
+
 
 	@Override
 	public int register(PostDto dto) {
@@ -79,6 +78,14 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public boolean modify(PostDto dto) {
 		
+		Optional<Post> optional = repository.findById(dto.getPostid());
+		
+		if(optional.isPresent()) {
+			Post entity = optional.get();
+			entity.setTitle(dto.getTitle());
+			entity.setContent(dto.getContent());
+			return true;
+		}
 		return false;
 	}
 
@@ -161,9 +168,14 @@ public class PostServiceImpl implements PostService {
 		
 		return list;
 	}
-
-
-
+	
+	// 인기글 3개 가져옴
+	@Override
+	public List<PostDto> getTop3Posts() {
+	    List<Post> posts = repository.findTop3PostsNative();
+	    return posts.stream().map(this::entityToDto).toList();
+	}
+	
 	@Override
 	public Page<PostDto> category(int boardId, Pageable pageable) {
 		
@@ -185,6 +197,7 @@ public class PostServiceImpl implements PostService {
 		
 		return dtopage;
 	}
+	
 
 
 //    PostDto dto = entityToDto(entity);

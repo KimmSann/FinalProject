@@ -6,8 +6,32 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body { padding-top: 70px; }
-    .post-list { margin-bottom: 2rem; }
-    .sidebar { background-color: #f8f9fa; padding: 1rem; border-radius: 0.5rem; }
+    .board-title { margin-bottom: 1rem; border-bottom: 2px solid #ddd; padding-bottom: 0.5rem; }
+    .post-list { margin-bottom: 3rem; }
+    .post-item {
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #e9ecef;
+    }
+    .post-item:last-child { border-bottom: none; }
+    .post-item a { text-decoration: none; color: #000; }
+    .post-item a:hover { text-decoration: underline; }
+    .post-meta {
+      font-size: 0.85rem;
+      color: #6c757d;
+    }
+    .sidebar {
+      background-color: #f8f9fa;
+      padding: 1rem;
+      border-radius: 0.5rem;
+    }
+    .sidebar h4 {
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .sidebar li {
+      margin-bottom: 0.75rem;
+    }
   </style>
 </head>
 <body>
@@ -20,7 +44,6 @@
       </button>
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
         <ul class="navbar-nav">
-        <!-- 추후 추가 예정 -->
           <li class="nav-item"><a class="nav-link" href="/board/category?boardId=1">Q&A</a></li>
           <li class="nav-item"><a class="nav-link" href="/board/category?boardId=2">자유게시판</a></li>
           <li class="nav-item"><a class="nav-link" href="#">공지사항</a></li>
@@ -31,55 +54,52 @@
     </div>
   </nav>
 
+  <!-- Main Content -->
   <div class="container">
     <div class="row">
-    
-<div class="col-md-8" th:each="board : ${boardlist}">
-  <h2 th:text="${board.boardname}"></h2>
+      
+      <!-- 게시판 리스트 -->
+      <div class="col-md-8">
+        <div th:each="board : ${boardlist}">
+          <h3 class="board-title" th:text="${board.boardname}"></h3>
+          
+          <div class="post-list">
+            <div class="post-item" th:each="post : ${boardPostMap[board.boardid]}">
+              <a th:href="@{/post/read(no=${post.postid})}" th:text="${post.title}"></a>
+              <div class="post-meta">
+                [[${#temporals.format(post.creatdate, 'yyyy-MM-dd HH:mm')}]] · 조회수 [[${post.viewcount}]]
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-  <table class="table table-hover">
-    <tbody>
-      <tr th:each="post : ${boardPostMap[board.boardid]}">
-        <td>
-          <a th:href="@{/post/read(no=${post.postid})}" th:text="${post.title}"></a>
-        </td>
-        <td th:text="${#temporals.format(post.creatdate, 'yyyy-MM-dd HH:mm')}"></td>
-        <td th:text="${post.viewcount}"></td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-	
-		
-		
       <!-- Sidebar -->
-      <!-- 추후 좋아요가 많은 순으로 정렬 예정 -->
       <div class="col-md-4">
         <div class="sidebar">
           <h4>인기글</h4>
           <ul class="list-unstyled">
-            <li><a href="#">이부분은 나중에 좋아요순으로 정렬할겁니다.</a></li>
-            <li><a href="#">취업 준비 꿀팁</a></li>
-            <li><a href="#">면접 질문 모음</a></li>
+            <li th:each="bestdto : ${bestPost}">
+              <a th:href="@{/post/read(no=${bestdto.postid})}" th:text="${bestdto.title}"></a><br>
+              <small th:text="${#temporals.format(bestdto.creatdate, 'yyyy-MM-dd HH:mm')}"></small><br>
+              <small>좋아요 수 : [[ ${bestdto.likecount} ]]</small>
+            </li>
           </ul>
-
+	
           <h4 class="mt-4">태그</h4>
-          <span class="badge bg-secondary">Java</span>
-          <span class="badge bg-secondary">Spring</span>
-          <span class="badge bg-secondary">React</span>
-          <span class="badge bg-secondary">취업</span>
-          <span class="badge bg-secondary">태그 부분도 나중에 수정할겁니다.</span>          
+          <span class="badge bg-secondary">Q&A</span>
+          <span class="badge bg-secondary">자유게시판</span>
         </div>
       </div>
+
     </div>
   </div>
 
   <!-- Footer -->
   <footer class="text-center mt-5 mb-3">
-    <small>&copy; 2025 OKKY Clone. All rights reserved.</small>
+    <small>&copy; 2025 With Game. All rights reserved.</small>
   </footer>
-        
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

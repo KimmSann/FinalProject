@@ -9,4 +9,5 @@ import com.example.demo.postimg.entity.Postimg;
 
 public interface PostimgRepository extends JpaRepository<Postimg, Integer> {
 	List<Postimg> findByPostid(Post postid);
+	void deleteByPostid(Post post);
 }

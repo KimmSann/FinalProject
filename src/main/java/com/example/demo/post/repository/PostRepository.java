@@ -15,6 +15,6 @@ public interface PostRepository extends JpaRepository<Post, Integer>{
 	
 	Page<Post> findByBoardid(Board boardid, Pageable pageable);
 	
-	@Query("SELECT p FROM Post p ORDER BY p.likecount DESC")
-	List<Post> findTop3(Pageable pageable);
+	@Query(value = "SELECT * FROM tbl_post ORDER BY likecount DESC LIMIT 3", nativeQuery = true)
+	List<Post> findTop3PostsNative();
 }

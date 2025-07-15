@@ -9,11 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import com.example.demo.comment.dto.CommentDto;
 import com.example.demo.comment.service.CommentService;
 import com.example.demo.post.dto.PostDto;
 import com.example.demo.post.service.PostService;
@@ -25,6 +22,7 @@ import com.example.demo.user.service.UserService;
 @Controller
 @RequestMapping("post")
 public class PostController {
+
 	
 	@Autowired
 	PostService postservice;
@@ -37,16 +35,17 @@ public class PostController {
 	
 	@Autowired
 	PostimgService postimgService;
-	
+
+
 
 	
 	
 	@GetMapping("/read")
 	public void read(@RequestParam(name = "no") int postid, Model model) {
 		
+		// 댓글은 따로 컨트롤러에서 설정
+		
 		postservice.viewcount(postid);
-		// 댓글 목록 List로 받고 뿌리기 타임리프로 반복문 써야할듯
-		List<CommentDto> commentList = commentService.getList(postid);
 		// postid로 유저 아이디 찾기
 		PostDto postDto = postservice.read(postid);
 		int userId = postDto.getUserid();
@@ -56,13 +55,15 @@ public class PostController {
 		
 		model.addAttribute("postDto", postDto);
 		model.addAttribute("userDto", userDto);
-		model.addAttribute("commentList", commentList);
 		model.addAttribute("postimgDto", postimgDto);
 	}
 	
 	@GetMapping("/register")
-	public String register() {
+	public String register(@RequestParam(name = "postId") int postId, Model model) {
 		
+		PostDto dto = postservice.read(postId);
+		
+		model.addAttribute("dto",dto);
 		return "post/register";
 	}
 	
@@ -84,27 +85,77 @@ public class PostController {
 
 	    int registerNo = postservice.register(dto);
 
-	    boolean hasNonEmpty = false;
+	    boolean noFiles = false;
+	    
+	    // 파일에 아무것도 없으면 넘어가기
 	    if (files != null) {
 	        for (MultipartFile f : files) {
 	            if (f != null && !f.isEmpty()) {
-	                hasNonEmpty = true;
+	            	noFiles = true;
 	                break;
 	            }
 	        }
 	    }
 
-	    if (hasNonEmpty) {
+	    if (noFiles) {
 	        postimgService.savePostImage(registerNo, files);
 	    }
 
 	    return "redirect:/";
 	}
 	
+	@PostMapping("/modify")
+	public String modifySave(
+			@RequestParam(name = "postId") int postId,
+			@RequestParam(name = "content") String content,
+			@RequestParam(name = "title") String title,
+			@RequestParam(name = "newImage", required = false) MultipartFile[] file) {
+		
+		PostDto postdto = PostDto.builder()
+				.postid(postId)	
+				.content(content)
+				.title(title)
+				.build();
+		
+		postservice.modify(postdto);
+
+		boolean noFiles = false;
+	    // 파일에 아무것도 없으면 넘어가기
+	    if (file != null) {
+	        for (MultipartFile f : file) {
+	            if (f != null && !f.isEmpty()) {
+	            	noFiles = true;
+	                break;
+	            }
+	        }
+	    }
+	    if (noFiles) {
+	        postimgService.modify(postId, file);
+	    }
+		
+
+		
+		return "redirect:/";
+	}
+	
+	
+	
+	
+	@GetMapping("/modify")
+	public void modify(@RequestParam(name = "postId") int postId, Model model) {
+		// 닉네임을 가져옴
+		PostDto postDto = postservice.read(postId);
+		UserDto userDto = userservice.read(postDto.getUserid());
+		postDto.setNickname(userDto.getNickname());
+		List<PostimgDto> postimgDto = postimgService.getPostImages(postId);
+		model.addAttribute("postDto",postDto);
+		model.addAttribute("postimgDto", postimgDto);
+	}
 	
 	@PostMapping("/like")
 	public String likePost(@RequestParam("postId") int postId, RedirectAttributes redirectAttributes) {
 	    int newCount = postservice.likePost(postId);
+	    System.out.println(newCount);
 	    redirectAttributes.addFlashAttribute("message", "좋아요가 눌렸습니다! 👍");
 	    return "redirect:/post/read?no=" + postId;
 	}
@@ -112,6 +163,7 @@ public class PostController {
 	@PostMapping("unlike")
 	public String unlikePost(@RequestParam("postId") int postId, RedirectAttributes redirectAttributes) {
 	    int newCount = postservice.unlikePost(postId);
+	    System.out.println(newCount);
 	    redirectAttributes.addFlashAttribute("message", "싫어요가 눌렸습니다! 👎");
 	    return "redirect:/post/read?no=" + postId;
 	}

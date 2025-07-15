@@ -16,19 +16,15 @@ import com.example.demo.board.repository.BoardRepository;
 @Service
 public class BoardServiceImpl implements BoardService{
 
-    private final UserRepository userRepository;
+	@Autowired
+    UserRepository userRepository;
 
-    private final PostRepository postRepository;
+	@Autowired
+    PostRepository postRepository;
 
 	@Autowired
 	BoardRepository repository;
-
-    BoardServiceImpl(PostRepository postRepository, UserRepository userRepository) {
-        this.postRepository = postRepository;
-        this.userRepository = userRepository;
-    }
 	
-	// 외부에서 데이터 받음
 	@Override
 	public int register(BoardDto dto) {
 		try {

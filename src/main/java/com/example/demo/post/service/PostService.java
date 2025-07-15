@@ -37,6 +37,7 @@ public interface PostService {
 	
 	int unlikePost(int postId);
 	
+	List<PostDto> getTop3Posts();
 	
 	default PostDto entityToDto(Post post) {
 		

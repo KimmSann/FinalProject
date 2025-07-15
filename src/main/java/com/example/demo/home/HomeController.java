@@ -27,6 +27,7 @@ public class HomeController {
 	
 	@GetMapping("/")
 	public String home(Model model) {
+		List<PostDto> bestPost = postService.getTop3Posts();
 	    List<BoardDto> boardlist = boardService.getList();
 	    Map<Integer, List<PostDto>> boardPostMap = new HashMap<>();
 	    
@@ -40,12 +41,11 @@ public class HomeController {
 	    }
 	    
 	    // 위와 비슷하게 좋아요순으로 정렬한 값 추출하기
-
+	    
+	    model.addAttribute("bestPost", bestPost);
 	    model.addAttribute("boardlist", boardlist);
 	    model.addAttribute("boardPostMap", boardPostMap);
 	    return "home/main";
-	    
-	    // 테스트
 	}
 
 

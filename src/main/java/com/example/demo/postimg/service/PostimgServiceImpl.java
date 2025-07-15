@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.post.entity.Post;
@@ -61,6 +62,19 @@ public class PostimgServiceImpl implements PostimgService{
         
 	}
 
+	@Override
+	@Transactional
+	public void modify(int postId, MultipartFile[] files) {
+		
+		Post entity = Post.builder()
+				.postid(postId)
+				.build();
+		
+		// 이 부분에서 에러남
+		repository.deleteByPostid(entity);
+		
+		savePostImage(postId, files);
+	}
 
 
 	

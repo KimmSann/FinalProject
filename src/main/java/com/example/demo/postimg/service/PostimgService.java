@@ -14,6 +14,7 @@ public interface PostimgService {
 	
 	List<PostimgDto> getPostImages(int postId);
 	
+	void modify(int postId, MultipartFile[] files);	
 	
 	
 	default PostimgDto entityToDto(Postimg postimg) {

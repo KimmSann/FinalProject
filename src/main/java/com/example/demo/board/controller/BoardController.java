@@ -1,7 +1,6 @@
 package com.example.demo.board.controller;
 
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,14 +33,15 @@ public class BoardController {
 			,Model model) {
 		// 그냥 클릭 시 viewcount 증가
 		
+		// 게시판 카테고리종류 가져옴
 		BoardDto boardDto = boardService.getBoardInfo(boardId);
 		
+		// 카테고리에 따른 게시물 가져옴
 		Page<PostDto> postDto = postService.category(boardId, pageable);
 		
 		// 모델의 포스트 값만 가져옴 이걸 출력하기
-		
 		model.addAttribute("boardDto", boardDto);
-		model.addAttribute("postDto", postDto);		
+		model.addAttribute("postDto", postDto);
 		return "board/category";
 	}
 	

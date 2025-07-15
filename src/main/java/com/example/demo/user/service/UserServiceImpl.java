@@ -50,5 +50,20 @@ public class UserServiceImpl implements UserService{
 			return null;			
 		}
 	}
+
+
+	@Override
+	public UserDto readByUserName(String nickname) {
+		Optional<User> result = repository.findByNickname(nickname);
+		
+		if(result.isPresent()) {
+			User user = result.get();
+			return entityToDto(user);
+		}
+		else {
+			return null;			
+		}
+	}
+	
 	
 }

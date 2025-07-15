@@ -12,8 +12,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.example.demo.board.dto.BoardDto;
 import com.example.demo.board.service.BoardService;
+import com.example.demo.comment.dto.CommentDto;
+import com.example.demo.comment.service.CommentService;
 import com.example.demo.post.dto.PostDto;
 import com.example.demo.post.service.PostService;
+import com.example.demo.user.dto.UserDto;
+import com.example.demo.user.service.UserService;
 
 @Controller
 public class HomeController {
@@ -23,6 +27,12 @@ public class HomeController {
 	
 	@Autowired
 	PostService postService;
+	
+	@Autowired
+	UserService userService;
+	
+	@Autowired
+	CommentService commentService;
 	
 	
 	@GetMapping("/")
@@ -46,6 +56,36 @@ public class HomeController {
 	    model.addAttribute("boardlist", boardlist);
 	    model.addAttribute("boardPostMap", boardPostMap);
 	    return "home/main";
+	}
+	
+	@GetMapping("/home/mypage")
+	public void mypage(Model model) {
+		/* 
+		 * 출력해야하는 데이터들 :
+		 * user 정보들   클리어
+		 * 내가 작성한 게시물들  클리어
+		 * 내가 작성한 댓글들   
+		*/
+		// 시큐리티 적용하면 principal을 사용해서 넣기
+		// 나중에 이름이 아니더라도 이메일같은걸로 찾기
+		// 닉네임이 중복될 수 있기 때문 아니면 아이디로 받아올 수 있을지도
+		String nickname = "둘리 찐";
+		
+		UserDto userDto = userService.readByUserName(nickname);
+	    List<PostDto> postDto = postService.getListUserName(nickname)
+				                .stream()
+				                .limit(5)
+				                .collect(Collectors.toList());
+
+		List<CommentDto> commentDto = commentService.getListByNickname(nickname)
+		                         .stream()
+		                         .limit(5)
+		                         .collect(Collectors.toList());
+		
+		
+		model.addAttribute("userDto", userDto);
+		model.addAttribute("postDto", postDto);
+		model.addAttribute("commentDto", commentDto);
 	}
 
 

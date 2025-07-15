@@ -9,6 +9,8 @@ public interface UserService {
 	
 	UserDto read(int id);
 	
+	UserDto readByUserName(String nickname);
+	
 	default UserDto entityToDto (User user) {
 		
 		UserDto dto = UserDto.builder()

@@ -3,6 +3,8 @@ package com.example.demo.comment.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,7 @@ import com.example.demo.comment.entity.Comment;
 import com.example.demo.comment.repository.CommentRepository;
 import com.example.demo.post.entity.Post;
 import com.example.demo.user.dto.UserDto;
+import com.example.demo.user.entity.User;
 import com.example.demo.user.service.UserService;
 
 @Service
@@ -57,6 +60,29 @@ public class CommentServiceImpl implements CommentService{
 		
 		return dtoList;
 	}
+	
+	@Override
+	public List<CommentDto> getListByNickname(String nickname) {
+		
+		UserDto userDto = userService.readByUserName(nickname);
+		
+		//User user = User.builder().userid(userDto.getUserid()).build();
+		
+		User user = User.builder()
+				.userid(userDto.getUserid())
+				.build();
+		
+		List<Comment> result = repository.findByUser(user);
+		List<CommentDto> list = new ArrayList<>();
+		
+		list = result.stream()
+				.map(entity -> entityToDto(entity))
+				.collect(Collectors.toList());
+		
+		
+		return list;
+	}
+
 
 	@Override
 	public boolean remove(int commentId) {
@@ -72,5 +98,6 @@ public class CommentServiceImpl implements CommentService{
 		return true;
 		
 	}
+
 
 }

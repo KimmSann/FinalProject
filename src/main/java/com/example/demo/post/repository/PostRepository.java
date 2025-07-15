@@ -10,6 +10,8 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.example.demo.board.entity.Board;
 import com.example.demo.post.entity.Post;
+import com.example.demo.user.entity.User;
+
 
 public interface PostRepository extends JpaRepository<Post, Integer>{
 	
@@ -17,4 +19,6 @@ public interface PostRepository extends JpaRepository<Post, Integer>{
 	
 	@Query(value = "SELECT * FROM tbl_post ORDER BY likecount DESC LIMIT 3", nativeQuery = true)
 	List<Post> findTop3PostsNative();
+	
+	List<Post> findByUserid(User userid);
 }

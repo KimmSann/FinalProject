@@ -14,6 +14,7 @@ import com.example.demo.post.dto.PostDto;
 import com.example.demo.post.entity.Post;
 import com.example.demo.post.repository.PostRepository;
 import com.example.demo.user.dto.UserDto;
+import com.example.demo.user.entity.User;
 import com.example.demo.user.service.UserService;
 import com.example.demo.util.S3FileUtil;
 
@@ -25,6 +26,7 @@ public class PostServiceImpl implements PostService {
 
 	@Autowired
 	UserService userService;
+	
 	
 	// aws s3에 사진 저장
 	@Autowired
@@ -78,6 +80,7 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public boolean modify(PostDto dto) {
 		
+		// 나중에 로그인 한 유저 이름도 같이 받아서 비교 후 삭제처리하기
 		Optional<Post> optional = repository.findById(dto.getPostid());
 		
 		if(optional.isPresent()) {
@@ -90,18 +93,18 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public boolean remove(int postId) {
+	public void remove(int postId) {
 		Optional<Post> result = repository.findById(postId);
 		
 		if(result.isPresent()) {
+			//Post post = result.get();
+			// 나중에 로그인 한 유저 이름도 같이 받아서 비교 후 삭제처리하기
+			//post.getUserid();
+			
 			repository.deleteById(postId);
-			return true;
 		}
 		
-		return false;
 	}
-
-
 	
 	
 	@Override
@@ -169,6 +172,28 @@ public class PostServiceImpl implements PostService {
 		return list;
 	}
 	
+	
+	
+	@Override
+	public List<PostDto> getListUserName(String nickname) {
+		
+		UserDto dto = userService.readByUserName(nickname);
+		 
+		User user = User.builder()
+				.userid(dto.getUserid())
+				.build();
+		 
+		List<Post> result = repository.findByUserid(user);
+		List<PostDto> list = new ArrayList<>();
+		
+		list = result.stream()
+				.map(entity -> entityToDto(entity))
+				.collect(Collectors.toList());
+		
+		return list;
+	}
+	
+	
 	// 인기글 3개 가져옴
 	@Override
 	public List<PostDto> getTop3Posts() {
@@ -197,15 +222,4 @@ public class PostServiceImpl implements PostService {
 		
 		return dtopage;
 	}
-	
-
-
-//    PostDto dto = entityToDto(entity);
-//
-//    // 작성자 닉네임 추가
-//    int userId = dto.getUserid();
-//    UserDto userDto = userService.read(userId);
-//    dto.setNickname(userDto.getNickname());
-
-
 }

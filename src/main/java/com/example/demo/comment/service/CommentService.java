@@ -13,6 +13,8 @@ public interface CommentService {
 	
 	List<CommentDto> getList(int postId);
 	
+	List<CommentDto> getListByNickname(String nickname);
+	
 	boolean remove(int commentId);
 	
 	

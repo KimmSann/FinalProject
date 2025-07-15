@@ -59,12 +59,8 @@ public class PostController {
 	}
 	
 	@GetMapping("/register")
-	public String register(@RequestParam(name = "postId") int postId, Model model) {
+	public void register() {
 		
-		PostDto dto = postservice.read(postId);
-		
-		model.addAttribute("dto",dto);
-		return "post/register";
 	}
 	
 	// 이미지 추가
@@ -168,6 +164,14 @@ public class PostController {
 	    return "redirect:/post/read?no=" + postId;
 	}
 
+	@PostMapping("/remove")
+	public String remove(@RequestParam("postId") int postId, RedirectAttributes redirectAttributes) {
+	    postservice.remove(postId);
+	    redirectAttributes.addFlashAttribute("message", "게시글이 삭제되었습니다.");
+	    return "redirect:/";
+	}
 
+	
+	
 	
 }

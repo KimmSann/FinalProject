@@ -50,14 +50,8 @@ public class PostTest {
 	
 	@Test
 	void 게시물삭제() {
-		boolean result = service.remove(2);
-		
-		if(result) {
-			System.out.println("삭제가 성공되었습니다.");
-		}
-		else {
-			System.out.println("삭제가 실패되었습니다.");
-		}
+		service.remove(2);
+
 	}
 	
 	// 좋아요와 조회수는 컨트롤러 만들 때 하기

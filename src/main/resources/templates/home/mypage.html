@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>With Game - 마이페이지</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { padding-top: 70px; }
+    .profile-img {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 2px solid #ddd;
+      margin-bottom: 1rem;
+    }
+    .profile-info {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    .profile-info label {
+      font-weight: 600;
+      margin-top: 0.5rem;
+    }
+    .section-title {
+      border-bottom: 2px solid #ddd;
+      margin: 3rem 0 1rem;
+      padding-bottom: 0.5rem;
+      font-weight: 600;
+    }
+    .my-list .list-item {
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #eee;
+    }
+    .my-list .list-item:last-child {
+      border-bottom: none;
+    }
+    .list-item a {
+      text-decoration: none;
+      color: #000;
+    }
+    .list-item a:hover {
+      text-decoration: underline;
+    }
+    .list-meta {
+      font-size: 0.85rem;
+      color: #6c757d;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="/">With Game</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="/board/category?boardId=1">Q&A</a></li>
+          <li class="nav-item"><a class="nav-link" href="/board/category?boardId=2">자유게시판</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">공지사항</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">로그인</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">회원가입</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- Main Content -->
+  <div class="container text-center">
+    <h2 class="mb-4">마이페이지</h2>
+
+    <!-- 프로필 사진 -->
+    <img src="https://hyunjaebucket.s3.ap-northeast-2.amazonaws.com/%EC%9D%B4%EB%AF%B8%EC%A7%80%EA%B0%80+%EC%97%86%EC%8A%B5%EB%8B%88%EB%8B%A4..png"
+     alt="프로필 사진" class="profile-img">
+
+    <!-- 프로필 정보 -->
+    <div class="profile-info">
+      <div class="mb-3">
+        <label>이름</label>
+        <div class="form-control text-start">[[ ${ userDto.name } ]]</div>
+      </div>
+      <div class="mb-3">
+        <label>닉네임</label>
+        <div class="form-control text-start">[[ ${ userDto.nickname } ]]</div>
+      </div>
+      <div class="mb-3">
+        <label>이메일</label>
+        <div class="form-control text-start">[[ ${ userDto.email } ]]</div>
+      </div>
+    </div>
+
+    <!-- 내가 쓴 게시물 -->
+    <h5 class="section-title">내가 작성한 게시물</h5>
+    <div class="my-list text-start mx-auto" style="max-width: 600px;">
+    
+    <!-- 이부분에 반복문 넣기 postDto -->
+      <div class="list-item" th:each=" postdto : ${postDto} ">
+        <a href="#">[[ ${ postdto.title } ]]</a>
+        <div class="list-meta">[[${#temporals.format(postdto.creatdate, 'yyyy-MM-dd HH:mm')}]] · 조회수 [[${postdto.viewcount}]]</div>
+      </div>
+      
+    </div>
+
+    <!-- 내가 쓴 댓글 -->
+    <h5 class="section-title">내가 작성한 댓글</h5>
+    <div class="my-list text-start mx-auto" style="max-width: 600px;">
+    
+    <!-- th:each commentDto -->
+	  <div class="list-item" th:each="comment : ${commentDto}">
+	    <a href="#">[[${comment.content}]]</a>
+	    <div class="list-meta">
+	      [[${#temporals.format(comment.createdate, 'yyyy-MM-dd')}]]
+	      · 작성한 글 ID: [[${comment.postid}]]
+	    </div>
+	  </div>
+      
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="text-center mt-5 mb-3">
+    <small>&copy; 2025 With Game. All rights reserved.</small>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

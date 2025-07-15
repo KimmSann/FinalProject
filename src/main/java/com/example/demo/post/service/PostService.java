@@ -27,7 +27,7 @@ public interface PostService {
 	
 	boolean modify(PostDto dto);
 	
-	boolean remove(int postId);
+	void remove(int postId);
 	
 	// 조회수 싫어요, 좋아요 수 관리
 	
@@ -38,6 +38,8 @@ public interface PostService {
 	int unlikePost(int postId);
 	
 	List<PostDto> getTop3Posts();
+	
+	List<PostDto> getListUserName(String nickname);
 	
 	default PostDto entityToDto(Post post) {
 		

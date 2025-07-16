@@ -14,17 +14,15 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
-    // 로그인 폼 GET 요청
     @GetMapping("/login")
     public String loginForm(@RequestParam(value = "message", required = false) String message,
                             Model model) {
         if (message != null) {
-            model.addAttribute("message", message); // JavaScript alert용
+            model.addAttribute("message", message);
         }
-        return "login"; // templates/login.html
+        return "login";
     }
 
-    // 로그인 처리 POST 요청
     @PostMapping("/login")
     public String login(@RequestParam("email") String email,
                         @RequestParam("password") String password,
@@ -34,7 +32,7 @@ public class LoginController {
         UserDto user = userService.login(email, password);
         if (user != null) {
             session.setAttribute("loginUser", user);
-            return "redirect:/login?message=로그인 성공!"; // alert로 표시
+            return "redirect:/login?message=로그인 성공!";
         } else {
             model.addAttribute("error", "이메일 또는 비밀번호가 틀렸습니다.");
             model.addAttribute("message", "로그인 실패!");
@@ -42,7 +40,6 @@ public class LoginController {
         }
     }
 
-    // 로그아웃
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();

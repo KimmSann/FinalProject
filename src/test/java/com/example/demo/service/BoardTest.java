@@ -24,7 +24,7 @@ public class BoardTest {
 		BoardDto dto = BoardDto.builder()
 				.boardname("Q&A")
 				.description("질의응답을 해야해요")
-				.adminid(1)   // 관리자가 없으니 에러남
+				.adminid(3)   // 관리자가 없으니 에러남
 				.build();
 
 		
@@ -34,6 +34,13 @@ public class BoardTest {
 //				.adminid(1)
 //				.build();
 		
+		
+
+//		BoardDto dto = BoardDto.builder()
+//				.boardname("게임 평가")
+//				.description("유저들과 게임을 평가합니다.")
+//				.adminid(1)   // 관리자가 없으니 에러남
+//				.build();
 		int no = service.register(dto);
 		
 		System.out.println(no);

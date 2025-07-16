@@ -1,61 +1,48 @@
 package com.example.demo.user.service;
 
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 import com.example.demo.user.dto.UserDto;
 import com.example.demo.user.entity.User;
 import com.example.demo.user.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    UserRepository repository;
+    private UserRepository userRepository;
 
     @Autowired
-    PasswordEncoder passwordEncoder;  // 🔐 주입
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public boolean register(UserDto dto) {
-        try {
-            int id = dto.getUserid();
-            UserDto getDto = read(id);
-
-            if (getDto != null) {
-                System.out.println("사용중인 아이디 입니다.");
-                return false;
-            } else {
-                
-                String rawPassword = dto.getPassword();
-                String encodedPassword = passwordEncoder.encode(rawPassword);
-                dto.setPassword(encodedPassword); // DTO에 암호화된 비밀번호로 교체
-
-                User entity = dtoToEntity(dto); // 암호화된 비밀번호 포함된 DTO → 엔티티
-
-                repository.save(entity);
-                System.out.println("저장 완료");
-                return true;
-            }
-        } catch (Exception e) {
-            System.out.println("ERROR : " + e);
-            return false;
-        }
+        // 비밀번호 암호화 후 저장
+        dto.setPassword(passwordEncoder.encode(dto.getPassword()));
+        User user = dtoToEntity(dto);
+        userRepository.save(user);
+        return true;
     }
 
-	@Override
-	public UserDto read(int id) {
-		Optional<User> result = repository.findById(id);
-		
-		if(result.isPresent()) {
-			User user = result.get();
-			return entityToDto(user);
-		}
-		else {
-			return null;			
-		}
-	}
-	
+    @Override
+    public UserDto read(int id) {
+        return userRepository.findById(id)
+                .map(this::entityToDto)
+                .orElse(null);
+    }
+
+    @Override
+    public UserDto login(String email, String password) {
+        Optional<User> userOpt = userRepository.findByEmail(email);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            if (passwordEncoder.matches(password, user.getPassword())) {
+                return entityToDto(user); // 로그인 성공
+            }
+        }
+        return null; // 로그인 실패
+    }
 }

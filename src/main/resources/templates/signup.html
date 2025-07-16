@@ -9,8 +9,6 @@
 </head>
 
 <body>
-
-
 	<section class="vh-100" style="background-color: #eee;">
 		<div class="container h-100">
 			<div class="row d-flex justify-content-center align-items-center h-100">
@@ -21,73 +19,79 @@
 								<div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
 									<p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">회원가입</p>
 
-
 									<form action="/signup" method="post" class="mx-1 mx-md-4">
+										<!-- 닉네임 (nickname) -->
 										<div class="d-flex flex-row align-items-center mb-4">
 											<i class="fas fa-user fa-lg me-3 fa-fw"></i>
 											<div class="form-outline flex-fill mb-0">
-												<input type="text" id="username" name="username" class="form-control"
-													placeholder="root" required="required" />
-												<label class="form-label" for="username">Login ID (username)</label>
+												<input type="text" id="nickname" name="nickname" class="form-control"
+													placeholder="닉네임" required />
+												<label class="form-label" for="nickname">닉네임</label>
 											</div>
 										</div>
 
-										<div class="d-flex flex-row align-items-center mb-4">
-											<i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
-											<div class="form-outline flex-fill mb-0">
-												<input type="password" id="password" name="password"
-													class="form-control" placeholder="root" required="required" />
-												<label class="form-label" for="password">Password</label>
-											</div>
-										</div>
-
+										<!-- 비밀번호 (password) -->
 										<div class="d-flex flex-row align-items-center mb-4">
 											<i class="fas fa-lock fa-lg me-3 fa-fw"></i>
 											<div class="form-outline flex-fill mb-0">
-												<input type="email" id="email" name="email" class="form-control"
-													placeholder="root@naver.com" required="required" />
-												<label class="form-label" for="email">Email</label>
+												<input type="password" id="password" name="password"
+													class="form-control" placeholder="비밀번호" required />
+												<label class="form-label" for="password">비밀번호</label>
 											</div>
 										</div>
 
+										<!-- 이메일 (email) -->
 										<div class="d-flex flex-row align-items-center mb-4">
-											<i class="fas fa-key fa-lg me-3 fa-fw"></i>
+											<i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
+											<div class="form-outline flex-fill mb-0">
+												<input type="email" id="email" name="email" class="form-control"
+													placeholder="example@domain.com" required />
+												<label class="form-label" for="email">이메일</label>
+											</div>
+										</div>
+
+										<!-- 이름 (name) -->
+										<div class="d-flex flex-row align-items-center mb-4">
+											<i class="fas fa-user-circle fa-lg me-3 fa-fw"></i>
 											<div class="form-outline flex-fill mb-0">
 												<input type="text" id="name" name="name" class="form-control"
-													placeholder="홍길동" required="required" />
-												<label class="form-label" for="name">Your name</label>
+													placeholder="홍길동" required />
+												<label class="form-label" for="name">이름</label>
 											</div>
 										</div>
 
+										<!-- 선택: 프로필 이미지 (profileimg) -->
 										<div class="d-flex flex-row align-items-center mb-4">
-											<i class="fas fa-key fa-lg me-3 fa-fw"></i>
+											<i class="fas fa-image fa-lg me-3 fa-fw"></i>
 											<div class="form-outline flex-fill mb-0">
-												<input type="text" id="address" name="address" class="form-control"
-													placeholder="경기도 ~~" required="required" />
-												<label class="form-label" for="address">Your address</label>
+												<input type="text" id="profileimg" name="profileimg"
+													class="form-control"
+													placeholder="프로필 이미지 경로 (선택)" />
+												<label class="form-label" for="profileimg">프로필 이미지 URL</label>
 											</div>
 										</div>
 
+										<!-- 선택: 권한 (role) -->
 										<div class="d-flex flex-row align-items-center mb-4">
-											<i class="fas fa-key fa-lg me-3 fa-fw"></i>
+											<i class="fas fa-user-tag fa-lg me-3 fa-fw"></i>
 											<div class="form-outline flex-fill mb-0">
-												<input type="text" id="phone" name="phone" class="form-control"
-													placeholder="010-1111-1111" required="required" />
-												<label class="form-label" for="name">Your phone</label>
+												<select id="role" name="role" class="form-select">
+													<option value="USER" selected>USER</option>
+													<option value="ADMIN">ADMIN</option>
+												</select>
+												<label class="form-label" for="role">역할 (선택)</label>
 											</div>
 										</div>
 
-									
-
-										</div>
-
+										<!-- 가입 버튼 -->
 										<div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
 											<button type="submit" class="btn btn-primary btn-lg">가입하기</button>
 										</div>
 
 									</form>
-
 								</div>
+
+								<!-- 이미지 영역 -->
 								<div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
 									<img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.png"
 										class="img-fluid" alt="Sample image">
@@ -99,9 +103,5 @@
 			</div>
 		</div>
 	</section>
-
-
-
 </body>
-
 </html>

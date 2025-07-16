@@ -43,6 +43,7 @@ public class BoardController {
 		model.addAttribute("boardDto", boardDto);
 		model.addAttribute("postDto", postDto);
 		return "board/category";
+		// 테스트
 	}
 	
 	

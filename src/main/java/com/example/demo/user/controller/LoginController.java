@@ -1,8 +1,11 @@
 package com.example.demo.user.controller;
 
+import com.example.demo.user.dto.LoginDto;
 import com.example.demo.user.dto.UserDto;
 import com.example.demo.user.service.UserService;
+
 import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,35 +17,26 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/login")
-    public String loginForm(@RequestParam(value = "message", required = false) String message,
-                            Model model) {
-        if (message != null) {
-            model.addAttribute("message", message);
-        }
-        return "login";
+    // 로그인 폼
+    @GetMapping("/signin")
+    public String showSigninForm() {
+        return "signin";
     }
 
-    @PostMapping("/login")
-    public String login(@RequestParam("email") String email,
-                        @RequestParam("password") String password,
+    // 로그인 처리
+    @PostMapping("/signin")
+    public String login(@ModelAttribute LoginDto dto,
                         HttpSession session,
                         Model model) {
 
-        UserDto user = userService.login(email, password);
+        UserDto user = userService.login(dto.getUsername(), dto.getPassword());
+
         if (user != null) {
             session.setAttribute("loginUser", user);
-            return "redirect:/login?message=로그인 성공!";
+            return "redirect:/";
         } else {
-            model.addAttribute("error", "이메일 또는 비밀번호가 틀렸습니다.");
-            model.addAttribute("message", "로그인 실패!");
-            return "login";
+            model.addAttribute("error", "로그인 실패: 이메일 또는 비밀번호 오류");
+            return "signin";
         }
-    }
-
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "redirect:/login";
     }
 }

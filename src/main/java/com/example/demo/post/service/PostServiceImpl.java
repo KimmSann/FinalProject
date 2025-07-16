@@ -16,7 +16,7 @@ import com.example.demo.post.repository.PostRepository;
 import com.example.demo.user.dto.UserDto;
 import com.example.demo.user.entity.User;
 import com.example.demo.user.service.UserService;
-import com.example.demo.util.S3FileUtil;
+//import com.example.demo.util.S3FileUtil;
 
 
 @Service
@@ -29,8 +29,8 @@ public class PostServiceImpl implements PostService {
 	
 	
 	// aws s3에 사진 저장
-	@Autowired
-	S3FileUtil fileUtil;
+//	@Autowired
+//	S3FileUtil fileUtil;
 
 
 	@Override

@@ -2,34 +2,32 @@ package com.example.demo.user.service;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
+import com.example.demo.user.dto.LoginDto;
+import com.example.demo.user.dto.SignupDto;
 import com.example.demo.user.dto.UserDto;
 import com.example.demo.user.entity.User;
 import com.example.demo.user.repository.UserRepository;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
 @Service
-public class UserServiceImpl implements UserService{
-	
+public class UserServiceImpl implements UserService {
+
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-
     @Override
     public boolean register(UserDto dto) {
-        // 비밀번호 암호화 후 저장
         dto.setPassword(passwordEncoder.encode(dto.getPassword()));
         User user = dtoToEntity(dto);
         userRepository.save(user);
         return true;
     }
-
-
 
     @Override
     public UserDto read(int id) {
@@ -38,19 +36,11 @@ public class UserServiceImpl implements UserService{
                 .orElse(null);
     }
 
-
-	@Override
-	public UserDto readByUserName(String nickname) {
-		Optional<User> result = userRepository.findByNickname(nickname);
-		
-		if(result.isPresent()) {
-			User user = result.get();
-			return entityToDto(user);
-		}
-		else {
-			return null;			
-		}
-	}
+    @Override
+    public UserDto readByUserName(String nickname) {
+        Optional<User> result = userRepository.findByNickname(nickname);
+        return result.map(this::entityToDto).orElse(null);
+    }
 
     @Override
     public UserDto login(String email, String password) {
@@ -58,11 +48,52 @@ public class UserServiceImpl implements UserService{
         if (userOpt.isPresent()) {
             User user = userOpt.get();
             if (passwordEncoder.matches(password, user.getPassword())) {
-                return entityToDto(user); // 로그인 성공
+                return entityToDto(user);
             }
         }
-        return null; // 로그인 실패
+        return null;
     }
-	
-	
+
+    @Override
+    public void signup(SignupDto dto) {
+        if (userRepository.existsByEmail(dto.getEmail())) {
+            throw new RuntimeException("이미 등록된 이메일입니다.");
+        }
+
+        User user = User.builder()
+                .name(dto.getName())
+                .email(dto.getEmail())
+                .password(passwordEncoder.encode(dto.getPassword()))
+                .nickname(dto.getName()) 
+                .role("USER")
+                .build();
+
+        userRepository.save(user);
+    }
+
+    private User dtoToEntity(UserDto dto) {
+        return User.builder()
+                .userid(dto.getUserid())
+                .name(dto.getName())
+                .email(dto.getEmail())
+                .password(dto.getPassword())
+                .nickname(dto.getNickname())
+                .profileimg(dto.getProfileimg())
+                .role(dto.getRole())
+                .createdate(dto.getCreatedate())
+                .build();
+    }
+
+    private UserDto entityToDto(User entity) {
+        return UserDto.builder()
+                .userid(entity.getUserid())
+                .name(entity.getName())
+                .email(entity.getEmail())
+                .password(entity.getPassword())
+                .nickname(entity.getNickname())
+                .profileimg(entity.getProfileimg())
+                .role(entity.getRole())
+                .createdate(entity.getCreatedate())
+                .build();
+    }
 }

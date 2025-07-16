@@ -1,41 +1,13 @@
 package com.example.demo.user.service;
 
 import com.example.demo.user.dto.UserDto;
-import com.example.demo.user.entity.User;
+import com.example.demo.user.dto.SignupDto;
+import com.example.demo.user.dto.LoginDto;
 
 public interface UserService {
-
     boolean register(UserDto dto);
-
     UserDto read(int id);
-    
-	UserDto readByUserName(String nickname);
-   
-    UserDto login(String email, String password);
-
-    default UserDto entityToDto(User user) {
-        return UserDto.builder()
-                .userid(user.getUserid())
-                .name(user.getName())
-                .email(user.getEmail())
-                .password(user.getPassword())
-                .nickname(user.getNickname())
-                .profileimg(user.getProfileimg())
-                .role(user.getRole())
-                .createdate(user.getCreatedate())
-                .build();
-    }
-
-    default User dtoToEntity(UserDto dto) {
-        return User.builder()
-                .userid(dto.getUserid())
-                .name(dto.getName())
-                .email(dto.getEmail())
-                .password(dto.getPassword())
-                .nickname(dto.getNickname())
-                .profileimg(dto.getProfileimg())
-                .role(dto.getRole())
-                .createdate(dto.getCreatedate())
-                .build();
-    }
+    UserDto readByUserName(String nickname);
+    UserDto login(String email, String password); 
+    void signup(SignupDto dto);
 }

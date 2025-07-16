@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void signup(SignupDto dto) {
+    public boolean signup(SignupDto dto) {
         if (userRepository.existsByEmail(dto.getEmail())) {
             throw new RuntimeException("이미 등록된 이메일입니다.");
         }
@@ -64,11 +64,12 @@ public class UserServiceImpl implements UserService {
                 .name(dto.getName())
                 .email(dto.getEmail())
                 .password(passwordEncoder.encode(dto.getPassword()))
-                .nickname(dto.getName()) 
+                .nickname(dto.getName())
                 .role("USER")
                 .build();
 
         userRepository.save(user);
+        return true;  // 가입 성공 시 true 반환
     }
 
     private User dtoToEntity(UserDto dto) {

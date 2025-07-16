@@ -3,6 +3,7 @@ package com.example.demo.user.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.user.dto.UserDto;
@@ -11,50 +12,36 @@ import com.example.demo.user.repository.UserRepository;
 
 @Service
 public class UserServiceImpl implements UserService{
+	
+    @Autowired
+    private UserRepository userRepository;
 
-	@Autowired
-	UserRepository repository;
-
-
-	@Override
-	public boolean register(UserDto dto) {
-	    try {
-	        Optional<User> existingUser = repository.findByEmail(dto.getEmail());
-	        if (existingUser.isPresent()) {
-	            System.out.println("이미 사용 중인 이메일입니다.");
-	            return false;
-	        }
-
-	        User entity = dtoToEntity(dto);
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
-	        repository.save(entity);
-	        System.out.println("저장 완료");
-	        return true;
-	    } catch (Exception e) {
-	        System.out.println("ERROR : " + e);
-	        return false;
-	    }
-	}
+    @Override
+    public boolean register(UserDto dto) {
+        // 비밀번호 암호화 후 저장
+        dto.setPassword(passwordEncoder.encode(dto.getPassword()));
+        User user = dtoToEntity(dto);
+        userRepository.save(user);
+        return true;
+    }
 
 
-	@Override
-	public UserDto read(int id) {
-		Optional<User> result = repository.findById(id);
-		
-		if(result.isPresent()) {
-			User user = result.get();
-			return entityToDto(user);
-		}
-		else {
-			return null;			
-		}
-	}
+
+    @Override
+    public UserDto read(int id) {
+        return userRepository.findById(id)
+                .map(this::entityToDto)
+                .orElse(null);
+    }
 
 
 	@Override
 	public UserDto readByUserName(String nickname) {
-		Optional<User> result = repository.findByNickname(nickname);
+		Optional<User> result = userRepository.findByNickname(nickname);
 		
 		if(result.isPresent()) {
 			User user = result.get();
@@ -64,6 +51,18 @@ public class UserServiceImpl implements UserService{
 			return null;			
 		}
 	}
+
+    @Override
+    public UserDto login(String email, String password) {
+        Optional<User> userOpt = userRepository.findByEmail(email);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            if (passwordEncoder.matches(password, user.getPassword())) {
+                return entityToDto(user); // 로그인 성공
+            }
+        }
+        return null; // 로그인 실패
+    }
 	
 	
 }

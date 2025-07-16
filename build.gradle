@@ -44,9 +44,10 @@ dependencies {
 	implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-aws', version: '2.2.6.RELEASE'
 	
 	// 시큐리티들
-	//implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 	//implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 	//testImplementation 'org.springframework.security:spring-security-test'
+	
 	
 	
 }
@@ -67,3 +68,4 @@ options.getGeneratedSourceOutputDirectory().set(file(querydslDir))
 clean.doLast {
 file(querydslDir).deleteDir()
 }
+

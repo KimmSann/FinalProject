@@ -183,6 +183,34 @@ public class PostServiceImpl implements PostService {
 
 	    return 0;
 	}
+	
+//	@Override
+//	public int likePost(int postId, String nickname) {
+//	    Optional<User> userOpt = userRepository.findByNickname(nickname);
+//	    Optional<Post> postOpt = repository.findById(postId);
+//
+//	    if (userOpt.isEmpty() || postOpt.isEmpty()) return -1;
+//
+//	    User user = userOpt.get();
+//	    Post post = postOpt.get();
+//
+//	    boolean alreadyClicked = postLikeRepository.existsByUserAndPost(user, post);
+//	    if (alreadyClicked) return -1;
+//
+//	    // 좋아요 처리
+//	    int updatedCount = post.getLikecount() + 1;
+//	    post.setLikecount(updatedCount);
+//	    repository.save(post);
+//
+//	    // 기록 저장
+//	    PostLike like = new PostLike();
+//	    like.setUser(user);
+//	    like.setPost(post);
+//	    like.setLike(true);  // 좋아요 true
+//	    postLikeRepository.save(like);
+//
+//	    return updatedCount;
+//	}
 
 	@Override
 	public int unlikePost(int postId) {

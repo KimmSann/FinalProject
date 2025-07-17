@@ -1,5 +1,7 @@
 package com.example.demo.user.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.*;
 
 @Getter
@@ -13,4 +15,6 @@ public class SignupDto {
     private String email;
     private String password;
     private String nickname;
+    private String role; 
+    private MultipartFile profileimg;  
 }

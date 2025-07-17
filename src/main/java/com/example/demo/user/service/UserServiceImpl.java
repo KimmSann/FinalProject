@@ -64,12 +64,12 @@ public class UserServiceImpl implements UserService {
                 .name(dto.getName())
                 .email(dto.getEmail())
                 .password(passwordEncoder.encode(dto.getPassword()))
-                .nickname(dto.getName())
-                .role("USER")
+                .nickname(dto.getNickname()) // dto.getNickname() 사용
+                .role(dto.getRole())         // 폼에서 받은 role 반영
                 .build();
 
         userRepository.save(user);
-        return true;  // 가입 성공 시 true 반환
+        return true;
     }
 
     private User dtoToEntity(UserDto dto) {

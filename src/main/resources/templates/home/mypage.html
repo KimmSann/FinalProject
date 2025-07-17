@@ -63,8 +63,8 @@
           <li class="nav-item"><a class="nav-link" href="/board/category?boardId=1">게임 평가</a></li>
           <li class="nav-item"><a class="nav-link" href="/board/category?boardId=2">자유게시판</a></li>
           <li class="nav-item"><a class="nav-link" href="/board/category?boardId=3">QnA</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">로그인</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">회원가입</a></li>
+          <li class="nav-item"><a class="nav-link" href="/signin">로그인</a></li>
+          <li class="nav-item"><a class="nav-link" href="/signup">회원가입</a></li>
           <li class="nav-item"><a class="nav-link" href="/home/mypage">마이페이지</a></li>
         </ul>
       </div>
@@ -76,9 +76,15 @@
   <div class="container text-center">
     <h2 class="mb-4">마이페이지</h2>
 
-    <!-- 프로필 사진 -->
-    <img src="https://hyunjaebucket.s3.ap-northeast-2.amazonaws.com/%EC%9D%B4%EB%AF%B8%EC%A7%80%EA%B0%80+%EC%97%86%EC%8A%B5%EB%8B%88%EB%8B%A4..png"
-     alt="프로필 사진" class="profile-img">
+    <!-- 프로필 사진 
+    class="profile-img"
+    -->
+<!-- 프로필 이미지: 있으면 userDto.profileimg, 없으면 기본 이미지 -->
+	<img th:src="${ userDto.profileimg }"	     
+		alt="프로필 이미지"
+	     class="profile-img"
+	     width="32"
+	     height="32">
 
     <!-- 프로필 정보 -->
     <div class="profile-info">
@@ -114,6 +120,7 @@
     
     <!-- th:each commentDto -->
 	  <div class="list-item" th:each="comment : ${commentDto}">
+	  <!-- th:href로 나중에 링크 입력하기 -->
 	    <a href="#">[[${comment.content}]]</a>
 	    <div class="list-meta">
 	      [[${#temporals.format(comment.createdate, 'yyyy-MM-dd')}]]
@@ -122,6 +129,7 @@
 	  </div>
       
     </div>
+    
 
   </div>
 

@@ -35,6 +35,8 @@ public class BoardController {
 			,@RequestParam(value = "keyword", required = false) String keyword
 			,Model model, Principal principal) {
 		
+
+		
 		Page<PostDto> postDto;
 		if(keyword != null && !keyword.trim().isEmpty()) {
 			postDto = postService.searchByKeyword(keyword, pageable);

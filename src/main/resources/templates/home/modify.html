@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>With Game - 프로필 수정</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { padding-top: 70px; background-color: #f8f9fa; }
+    .card { max-width: 600px; margin: auto; }
+    .profile-img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="/">With Game</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+        <!-- 추후 추가 예정 -->
+          <li class="nav-item"><a class="nav-link" href="/board/category?boardId=1">게임 평가</a></li>
+          <li class="nav-item"><a class="nav-link" href="/board/category?boardId=2">자유게시판</a></li>
+          <li class="nav-item"><a class="nav-link" href="/board/category?boardId=3">QnA</a></li>
+          <li class="nav-item"><a class="nav-link" href="/signin">로그인</a></li>
+          <li class="nav-item"><a class="nav-link" href="/signup">회원가입</a></li>
+          <li class="nav-item"><a class="nav-link" href="/home/mypage">마이페이지</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+<!-- Main -->
+<div class="container mt-5">
+  <div class="card shadow-sm p-4">
+    <h3 class="mb-4 text-center">프로필 수정</h3>
+
+    <form action="/home/modify" method="post" enctype="multipart/form-data">
+      
+      <!-- 프로필 이미지 -->
+      <div class="text-center mb-3">
+        <img th:src="${ userDto.profileimg != null && !userDto.profileimg.isEmpty() 
+                      ? userDto.profileimg 
+                      : 'https://hyunjaebucket.s3.ap-northeast-2.amazonaws.com/%EC%9D%B4%EB%AF%B8%EC%A7%80%EA%B0%80+%EC%97%86%EC%8A%B5%EB%8B%88%EB%8B%A4..png' }"
+             alt="프로필 이미지"
+             class="profile-img img-thumbnail">
+      </div>
+
+      <!-- 프로필 이미지 업로드 -->
+      <div class="mb-3">
+        <label for="newImage" class="form-label">프로필 이미지 변경</label>
+        <input type="file" class="form-control" id="files" name="files">
+      </div>
+
+      <!-- 이름 -->
+      <div class="mb-3">
+        <label class="form-label">이름</label>
+        <input type="text" class="form-control" name="name" th:value="${ userDto.name }" readonly>
+      </div>
+
+      <!-- 닉네임 -->
+      <div class="mb-3">
+        <label class="form-label">닉네임</label>
+        <input type="text" class="form-control" name="nickname" th:value="${ userDto.nickname }">
+      </div>
+
+      <!-- 이메일 -->
+      <div class="mb-4">
+        <label class="form-label">이메일</label>
+        <input type="email" class="form-control" name="email" th:value="${ userDto.email }" readonly>
+      </div>
+
+      <!-- 버튼 -->
+      <div class="d-flex justify-content-between">
+        <button type="submit" class="btn btn-primary">수정 완료</button>
+        <button type="button" class="btn btn-secondary" onclick="history.back()">뒤로가기</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="text-center mt-5 mb-3">
+  <small>&copy; 2025 With Game. All rights reserved.</small>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

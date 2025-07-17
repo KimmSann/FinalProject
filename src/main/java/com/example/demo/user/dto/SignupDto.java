@@ -9,8 +9,10 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SignupDto {
-    private String name;
-    private String email;
-    private String password;
-    private String nickname;
+    String name;
+    String email;
+    String password;
+    String nickname;
+    String profileName;
+    
 }

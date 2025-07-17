@@ -13,6 +13,8 @@ import com.example.demo.board.entity.Board;
 import com.example.demo.post.dto.PostDto;
 import com.example.demo.post.entity.Post;
 import com.example.demo.post.repository.PostRepository;
+import com.example.demo.postLike.entity.PostLike;
+import com.example.demo.postLike.repository.PostLikeRepository;
 import com.example.demo.user.dto.UserDto;
 import com.example.demo.user.entity.User;
 import com.example.demo.user.service.UserService;
@@ -26,6 +28,9 @@ public class PostServiceImpl implements PostService {
 
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	PostLikeRepository postLikeRepository;
 	
 	
 	// aws s3에 사진 저장
@@ -85,6 +90,26 @@ public class PostServiceImpl implements PostService {
 		}
 		return false;
 	}
+//	public boolean modifter(PostDto dto, String loginNickname) {
+//	    Optional<Post> optional = repository.findById(dto.getPostid());
+//
+//	    if (optional.isEmpty()) {
+//	        return false;
+//	    }
+//	    Post post = optional.get();
+//	    String writerName = post.getUserid().getName();
+//	    
+//	    if(!writerName.equals(loginNickname)) {
+//	    	return false;
+//	    }
+//	    if(optional.isPresent()) {
+//	    	post.setContent(dto.getContent());
+//	    	post.setTitle(dto.getContent());
+//	    	return true;
+//	    }
+//	    return false;
+//	}
+	
 
 	@Override
 	public void remove(int postId) {
@@ -99,6 +124,28 @@ public class PostServiceImpl implements PostService {
 		}
 		
 	}
+//	@Override
+//	public boolean remove(int postId, String loginNickname) {
+//	    Optional<Post> result = repository.findById(postId);
+//
+//	    if (result.isEmpty()) {
+//	        return false;
+//	    }
+//
+//	    Post post = result.get();
+//
+//	    // 게시글 작성자의 닉네임
+//	    String writerNickname = post.getUser().getNickname();
+//	    // 닉네임이 다르면 삭제 거부
+//	    if (!writerNickname.equals(loginNickname)) {
+//	        return false;
+//	    }
+//
+//	    repository.deleteById(postId);
+//	    return true;
+//	}
+	
+
 	
 	
 	@Override

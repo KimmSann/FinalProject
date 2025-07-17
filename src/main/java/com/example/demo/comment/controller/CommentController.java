@@ -15,6 +15,7 @@ public class CommentController {
     private CommentService commentService;
 
     
+    // 로그인이 필요하다하기
     @PostMapping("/register")
     public boolean register(@RequestBody CommentDto commentDto) {
     	// 나중에 dto.serwriter을 사용해서 이름을 미리 정해둠 뒤 출력
@@ -29,6 +30,7 @@ public class CommentController {
         return commentService.getList(postId);
     }
 
+    
     /** 댓글 삭제 */
     @DeleteMapping("/delete")
     public boolean delete(@RequestParam(name = "commentId") int commentId) {

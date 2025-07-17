@@ -1,5 +1,6 @@
 package com.example.demo.home;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,7 +60,7 @@ public class HomeController {
 	}
 	
 	@GetMapping("/home/mypage")
-	public void mypage(Model model) {
+	public void mypage(Model model, Principal principal) {
 		/* 
 		 * 출력해야하는 데이터들 :
 		 * user 정보들   클리어

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
+import com.example.demo.util.S3FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,12 +19,19 @@ import com.example.demo.user.service.UserService;
 @Service
 public class CommentServiceImpl implements CommentService{
 
+    private final S3FileUtil s3FileUtil;
+
 
 	@Autowired
 	CommentRepository repository;
 	
 	@Autowired
 	UserService userService;
+
+
+    CommentServiceImpl(S3FileUtil s3FileUtil) {
+        this.s3FileUtil = s3FileUtil;
+    }
 
 
 	@Override
@@ -87,7 +94,7 @@ public class CommentServiceImpl implements CommentService{
 	@Override
 	public boolean remove(int commentId) {
 		Optional<Comment> comment = repository.findById(commentId);
-		
+
 		
 		// 나중에 이름이 같은지 다른지 확인하는 로직 추가
 		
@@ -98,6 +105,29 @@ public class CommentServiceImpl implements CommentService{
 		return true;
 		
 	}
-
+	
+//	나중에 이름 가져와서 지우기
+//	@Override
+//	public boolean remove(int commentId, String loginNickname) {
+//	    Optional<Comment> commentOpt = repository.findById(commentId);
+//
+//	    if (commentOpt.isEmpty()) {
+//	        return false;
+//	    }
+//
+//	    Comment comment = commentOpt.get();
+//
+//	    // 댓글 작성자 닉네임을 가져오기 위해 User 엔티티에서 꺼냄
+//	    String writerNickname = comment.getUser().getNickname();
+//
+//	    // 닉네임이 일치하지 않으면 삭제 금지
+//	    if (!writerNickname.equals(loginNickname)) {
+//	        return false;
+//	    }
+//
+//	    repository.deleteById(commentId);
+//	    return true;
+//	}
+//
 
 }

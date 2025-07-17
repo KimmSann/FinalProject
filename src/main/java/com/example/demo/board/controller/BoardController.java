@@ -28,7 +28,7 @@ public class BoardController {
 	@Autowired
 	PostService postService;
 	
-	
+	// navbar 오른쪽 구석에 조그만하게 로그인된 이름 보여주기
 	@GetMapping("/category")
 	public String qna(@RequestParam(value = "boardId", required = false) int boardId
 			,@PageableDefault(size = 10) Pageable pageable

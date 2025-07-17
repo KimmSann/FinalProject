@@ -69,7 +69,7 @@ public class HomeController {
 		// 시큐리티 적용하면 principal을 사용해서 넣기
 		// 나중에 이름이 아니더라도 이메일같은걸로 찾기
 		// 닉네임이 중복될 수 있기 때문 아니면 아이디로 받아올 수 있을지도
-		String nickname = "둘리 찐";
+		String nickname = "길동이";
 		
 		UserDto userDto = userService.readByUserName(nickname);
 	    List<PostDto> postDto = postService.getListUserName(nickname)

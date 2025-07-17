@@ -16,7 +16,7 @@ import com.example.demo.post.repository.PostRepository;
 import com.example.demo.user.dto.UserDto;
 import com.example.demo.user.entity.User;
 import com.example.demo.user.service.UserService;
-//import com.example.demo.util.S3FileUtil;
+import com.example.demo.util.S3FileUtil;
 
 
 @Service
@@ -29,20 +29,14 @@ public class PostServiceImpl implements PostService {
 	
 	
 	// aws s3에 사진 저장
-//	@Autowired
-//	S3FileUtil fileUtil;
+	@Autowired
+	S3FileUtil fileUtil;
 
 
 	@Override
 	public int register(PostDto dto) {
 		try {
-//			System.out.println(dto);
-			
-			// boardid는 어떻게?
-			// boardId랑 어떻게 연결해야할듯 
 			Post entity = dtoToEntity(dto);
-			
-			//String imgPath = fileUtil.fileUpload(dto.get)
 			
 			repository.save(entity);
 			
@@ -221,5 +215,24 @@ public class PostServiceImpl implements PostService {
 		
 		
 		return dtopage;
+	}
+
+
+	@Override
+	public Page<PostDto> searchByKeyword(String keyword, Pageable pageable) {
+	    Page<Post> posts = repository.searchByKeyword(keyword, pageable);
+	    
+	    Page<PostDto> postdto = posts.map(entity -> {
+	    	
+	    	PostDto dto = entityToDto(entity);
+	    	
+	    	int userId = dto.getUserid();
+	    	UserDto userDto = userService.read(userId);
+	    	dto.setNickname(userDto.getNickname());
+	    	return dto;
+	    });
+	    
+	    return postdto;
+	    
 	}
 }

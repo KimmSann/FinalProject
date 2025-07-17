@@ -24,7 +24,7 @@ public class UserController {
             return "redirect:/signin";  // 회원가입 성공시 로그인 페이지로 이동
         } else {
             return "signup";            // 실패시 다시 회원가입 폼으로
-        }
+        } 
     }
 
   

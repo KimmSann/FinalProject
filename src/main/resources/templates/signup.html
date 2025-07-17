@@ -19,8 +19,9 @@
 								<div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
 									<p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">회원가입</p>
 
-									<form action="/signup" method="post" class="mx-1 mx-md-4">
-										<!-- 닉네임 (nickname) -->
+									<!-- enctype 필수! -->
+									<form action="/signup" method="post" enctype="multipart/form-data" class="mx-1 mx-md-4">
+										<!-- 닉네임 -->
 										<div class="d-flex flex-row align-items-center mb-4">
 											<i class="fas fa-user fa-lg me-3 fa-fw"></i>
 											<div class="form-outline flex-fill mb-0">
@@ -30,7 +31,7 @@
 											</div>
 										</div>
 
-										<!-- 비밀번호 (password) -->
+										<!-- 비밀번호 -->
 										<div class="d-flex flex-row align-items-center mb-4">
 											<i class="fas fa-lock fa-lg me-3 fa-fw"></i>
 											<div class="form-outline flex-fill mb-0">
@@ -40,7 +41,7 @@
 											</div>
 										</div>
 
-										<!-- 이메일 (email) -->
+										<!-- 이메일 -->
 										<div class="d-flex flex-row align-items-center mb-4">
 											<i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
 											<div class="form-outline flex-fill mb-0">
@@ -50,7 +51,7 @@
 											</div>
 										</div>
 
-										<!-- 이름 (name) -->
+										<!-- 이름 -->
 										<div class="d-flex flex-row align-items-center mb-4">
 											<i class="fas fa-user-circle fa-lg me-3 fa-fw"></i>
 											<div class="form-outline flex-fill mb-0">
@@ -60,18 +61,17 @@
 											</div>
 										</div>
 
-										<!-- 선택: 프로필 이미지 (profileimg) -->
+										<!-- 프로필 이미지 파일 업로드 -->
 										<div class="d-flex flex-row align-items-center mb-4">
 											<i class="fas fa-image fa-lg me-3 fa-fw"></i>
 											<div class="form-outline flex-fill mb-0">
-												<input type="text" id="profileimg" name="profileimg"
-													class="form-control"
-													placeholder="프로필 이미지 경로 (선택)" />
-												<label class="form-label" for="profileimg">프로필 이미지 URL</label>
+												<input type="file" id="profileimg" name="profileimg"
+													class="form-control" accept="image/*" />
+												<label class="form-label" for="profileimg">프로필 이미지 업로드</label>
 											</div>
 										</div>
 
-										<!-- 선택: 권한 (role) -->
+										<!-- 권한 선택 -->
 										<div class="d-flex flex-row align-items-center mb-4">
 											<i class="fas fa-user-tag fa-lg me-3 fa-fw"></i>
 											<div class="form-outline flex-fill mb-0">
@@ -103,5 +103,9 @@
 			</div>
 		</div>
 	</section>
+
+	<!-- fontawesome 사용 시 필요 -->
+	<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </body>
+
 </html>

@@ -14,14 +14,20 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    	
+    	// 댓글 달기, 좋아요, 싫어요, post.register modify, 마이페이지 이렇게 로그인 안하면 막기
+    	
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login", "/register", "/css/**", "/js/**", "/images/**").permitAll()
+                .requestMatchers("/signin", "/register", "/css/**", "/js/**", "/images/**").permitAll()
+                .requestMatchers("/", "/signin").permitAll()
+                .requestMatchers("/admin").hasRole("ADMIN")
+                .requestMatchers("/my/**").hasAnyRole("ADMIN", "USER")
                 .anyRequest().permitAll()
             )
             .formLogin(form -> form
-                .loginPage("/login")
+                .loginPage("/signin")
                 .permitAll()
                 .defaultSuccessUrl("/home", true)
             )
@@ -29,6 +35,22 @@ public class SecurityConfig {
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login")
             );
+        
+//	    http.authorizeHttpRequests()
+//        // 로그인해야만 접근 가능한 경로
+//        .requestMatchers("/cart/**", "/mypage/main").authenticated()
+//        // 등록은 권한이 판매자인 사람만 들어오게 하기
+//        
+//        // 권환을 확인하는 목록 : 물건 등록, 수정, 삭제, 주문목록수정
+//        .requestMatchers("/products/register")
+//        .hasAnyRole("SELLER")
+//        .requestMatchers("/products/modify")
+//        .hasAnyRole("SELLER")
+//        .requestMatchers("/products/remove")
+//        .hasAnyRole("SELLER")
+//        .requestMatchers("/mypage/orderlist")
+//        .hasAnyRole("SELLER")
+//        .anyRequest().permitAll();
 
         return http.build();
     }

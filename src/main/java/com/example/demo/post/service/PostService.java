@@ -41,6 +41,9 @@ public interface PostService {
 	
 	List<PostDto> getListUserName(String nickname);
 	
+	Page<PostDto> searchByKeyword(String keyword, Pageable pageable);
+
+	
 	default PostDto entityToDto(Post post) {
 		
 		int boardId = post.getBoardid().getBoardid();

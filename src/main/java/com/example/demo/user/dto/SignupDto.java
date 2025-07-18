@@ -16,5 +16,9 @@ public class SignupDto {
     private String password;
     private String nickname;
     private String role; 
-    private MultipartFile profileimg;  
+//    private MultipartFile profileimg;  
+
+
+    private String profileimg;  // 따로 s3fileutil에 String형태로 aws 에 저장했으니 현재걸로 병합해주세요*****
 }
+

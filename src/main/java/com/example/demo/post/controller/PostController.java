@@ -148,6 +148,7 @@ public class PostController {
 		model.addAttribute("postimgDto", postimgDto);
 	}
 	
+	
 	@PostMapping("/like")
 	public String likePost(@RequestParam("postId") int postId, RedirectAttributes redirectAttributes) {
 	    int newCount = postservice.likePost(postId);
@@ -156,6 +157,7 @@ public class PostController {
 	    return "redirect:/post/read?no=" + postId;
 	}
 
+	
 	@PostMapping("unlike")
 	public String unlikePost(@RequestParam("postId") int postId, RedirectAttributes redirectAttributes) {
 	    int newCount = postservice.unlikePost(postId);

@@ -1,6 +1,8 @@
 package com.example.demo.board.controller;
 
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,24 +28,34 @@ public class BoardController {
 	@Autowired
 	PostService postService;
 	
-	
+	// navbar 오른쪽 구석에 조그만하게 로그인된 이름 보여주기
 	@GetMapping("/category")
-	public String qna(@RequestParam("boardId") int boardId
+	public String qna(@RequestParam(value = "boardId", required = false) int boardId
 			,@PageableDefault(size = 10) Pageable pageable
-			,Model model) {
+			,@RequestParam(value = "keyword", required = false) String keyword
+			,Model model, Principal principal) {
+		
+
+		
+		Page<PostDto> postDto;
+		if(keyword != null && !keyword.trim().isEmpty()) {
+			postDto = postService.searchByKeyword(keyword, pageable);
+		}
+		else {
+			postDto = postService.category(boardId, pageable);
+		}
+		
 		// 그냥 클릭 시 viewcount 증가
 		
 		// 게시판 카테고리종류 가져옴
 		BoardDto boardDto = boardService.getBoardInfo(boardId);
 		
-		// 카테고리에 따른 게시물 가져옴
-		Page<PostDto> postDto = postService.category(boardId, pageable);
+		// 카테고리에 따른 게시물 가져
 		
 		// 모델의 포스트 값만 가져옴 이걸 출력하기
 		model.addAttribute("boardDto", boardDto);
 		model.addAttribute("postDto", postDto);
 		return "board/category";
 	}
-	
 	
 }

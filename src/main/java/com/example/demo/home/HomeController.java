@@ -1,5 +1,6 @@
 package com.example.demo.home;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.board.dto.BoardDto;
 import com.example.demo.board.service.BoardService;
@@ -18,6 +22,7 @@ import com.example.demo.post.dto.PostDto;
 import com.example.demo.post.service.PostService;
 import com.example.demo.user.dto.UserDto;
 import com.example.demo.user.service.UserService;
+import com.example.demo.util.S3FileUtil;
 
 @Controller
 public class HomeController {
@@ -34,9 +39,12 @@ public class HomeController {
 	@Autowired
 	CommentService commentService;
 	
+	@Autowired
+	S3FileUtil fileUtil;
+	
 	
 	@GetMapping("/")
-	public String home(Model model) {
+	public String home(Model model, Principal principal) {
 		List<PostDto> bestPost = postService.getTop3Posts();
 	    List<BoardDto> boardlist = boardService.getList();
 	    Map<Integer, List<PostDto>> boardPostMap = new HashMap<>();
@@ -50,8 +58,11 @@ public class HomeController {
 	        boardPostMap.put(board.getBoardid(), posts);
 	    }
 	    
+	    String name = (principal != null) ? principal.getName() : "게스트";
+	    
 	    // 위와 비슷하게 좋아요순으로 정렬한 값 추출하기
 	    
+	    model.addAttribute("name", name);
 	    model.addAttribute("bestPost", bestPost);
 	    model.addAttribute("boardlist", boardlist);
 	    model.addAttribute("boardPostMap", boardPostMap);
@@ -59,18 +70,10 @@ public class HomeController {
 	}
 	
 	@GetMapping("/home/mypage")
-	public void mypage(Model model) {
-		/* 
-		 * 출력해야하는 데이터들 :
-		 * user 정보들   클리어
-		 * 내가 작성한 게시물들  클리어
-		 * 내가 작성한 댓글들   
-		*/
-		// 시큐리티 적용하면 principal을 사용해서 넣기
-		// 나중에 이름이 아니더라도 이메일같은걸로 찾기
-		// 닉네임이 중복될 수 있기 때문 아니면 아이디로 받아올 수 있을지도
-		String nickname = "둘리 찐";
+	public void mypage(Model model, Principal principal) {
+		String nickname = "기철이";
 		
+		// 출력 5개로 제한
 		UserDto userDto = userService.readByUserName(nickname);
 	    List<PostDto> postDto = postService.getListUserName(nickname)
 				                .stream()
@@ -82,10 +85,42 @@ public class HomeController {
 		                         .limit(5)
 		                         .collect(Collectors.toList());
 		
-		
 		model.addAttribute("userDto", userDto);
 		model.addAttribute("postDto", postDto);
 		model.addAttribute("commentDto", commentDto);
+	}
+	
+	@GetMapping("/home/modify")
+	public void mypageModfy(Model model, Principal principal) {
+		
+		//String name = principal.getName();
+		
+		String name = "길동이";
+		UserDto userDto = userService.readByUserName(name);
+		
+		model.addAttribute("userDto", userDto);
+		
+	}
+	
+	@PostMapping("/home/modify")
+	public String changePage(
+			@RequestParam(name = "nickname") String nickname
+			,@RequestParam(name = "files") MultipartFile files){
+		
+		String filename = fileUtil.fileUpload(files);
+		
+		UserDto dto = UserDto.builder()
+				.profileimg(filename)
+				.nickname(nickname)
+				.build();	
+		boolean modifyCheck = userService.modify(dto);
+		
+		if(modifyCheck) {
+			return "home/modify";
+		}
+		
+		// 나중에 리다이렉트
+		return "home/mypage";
 	}
 
 

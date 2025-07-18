@@ -11,17 +11,19 @@
 	  </style>
 	</head>
 	<body>
-	  <!-- Navbar -->
-	  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-	    <div class="container">
-	      <a class="navbar-brand" href="/">With Game</a>
-	      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-	        <span class="navbar-toggler-icon"></span>
-	      </button>
-	      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-	        <ul class="navbar-nav">
-          <li class="nav-item"><a class="nav-link" href="/board/category?boardId=1">Q&A</a></li>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="/">With Game</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+        <!-- 추후 추가 예정 -->
+          <li class="nav-item"><a class="nav-link" href="/board/category?boardId=1">게임 평가</a></li>
           <li class="nav-item"><a class="nav-link" href="/board/category?boardId=2">자유게시판</a></li>
+<<<<<<< HEAD
 	          <li class="nav-item"><a class="nav-link" href="#">공지사항</a></li>
 	            <li class="nav-item"><a class="nav-link" href="/signin">로그인</a></li>
           <li class="nav-item"><a class="nav-link" href="/signup">회원가입</a></li>
@@ -29,16 +31,36 @@
 	      </div>
 	    </div>
 	  </nav>
+=======
+          <li class="nav-item"><a class="nav-link" href="/board/category?boardId=3">QnA</a></li>
+          <li class="nav-item"><a class="nav-link" href="/signin">로그인</a></li>
+          <li class="nav-item"><a class="nav-link" href="/signup">회원가입</a></li>
+          <li class="nav-item"><a class="nav-link" href="/home/mypage">마이페이지</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
+>>>>>>> e91db9b657b5d4b27a529a3c224b61fb027ac538
 	  <!-- Main Content -->
 	  <div class="container">
-	    <div class="d-flex justify-content-between align-items-center mb-3">
-	      <h2>[[ ${ boardDto.boardname } ]]</h2>
-	      <form class="d-flex search-bar">
-	        <input class="form-control me-2" type="search" placeholder="검색어 입력" aria-label="Search">
-	        <button class="btn btn-outline-primary" type="submit">검색</button>
-	      </form>
-	       <a th:href="@{/post/register}" class="btn btn-primary">작성하기</a>
-	    </div>
+		<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+		  <h2>[[ ${ boardDto.boardname } ]]</h2>
+		  
+		  <div class="d-flex gap-2 flex-wrap">
+		    <form class="d-flex search-bar" th:action="@{/board/category}" method="get">
+		      <input type="hidden" name="boardId" th:value="${ boardDto.boardid }"/>
+		      <div class="input-group">
+		        <input type="text" name="keyword" class="form-control" placeholder="검색어 입력">
+		        <button class="btn btn-outline-secondary" type="submit">
+		          <i class="bi bi-search"></i>
+		        </button>
+		      </div>
+		    </form>
+		    <a th:href="@{/post/register}" class="btn btn-primary">작성하기</a>
+		  </div>
+		</div>
+
 	    
 		<p class="text-center fs-4">[[ ${ boardDto.description } ]]</p>
 	    <table class="table table-hover">

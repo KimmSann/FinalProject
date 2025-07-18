@@ -5,6 +5,7 @@ import com.example.demo.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 public class UserController {
@@ -18,8 +19,11 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public String signupSubmit(@ModelAttribute SignupDto signupDto) {
-        boolean success = userService.signup(signupDto);
+    public String signupSubmit(@ModelAttribute SignupDto signupDto
+    		,@RequestParam(name = "files")MultipartFile files) {
+    	// 살짝 수정해서 버켓에 프로필 사진 담기 완료
+    	// 따로 s3fileutil에 String형태로 aws 에 저장했으니 현재걸로 병합해주세요*****
+        boolean success = userService.signup(signupDto, files);
         if (success) {
             return "redirect:/signin";  // 회원가입 성공시 로그인 페이지로 이동
         } else {

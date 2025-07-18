@@ -17,12 +17,15 @@ import com.example.demo.postLike.entity.PostLike;
 import com.example.demo.postLike.repository.PostLikeRepository;
 import com.example.demo.user.dto.UserDto;
 import com.example.demo.user.entity.User;
+import com.example.demo.user.repository.UserRepository;
 import com.example.demo.user.service.UserService;
 import com.example.demo.util.S3FileUtil;
 
 
 @Service
 public class PostServiceImpl implements PostService {
+
+    private final UserRepository userRepository;
 	@Autowired 
 	PostRepository repository;
 
@@ -36,6 +39,11 @@ public class PostServiceImpl implements PostService {
 	// aws s3에 사진 저장
 	@Autowired
 	S3FileUtil fileUtil;
+
+
+    PostServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
 
 	@Override
@@ -75,76 +83,49 @@ public class PostServiceImpl implements PostService {
 	}
 
 	
-
 	@Override
-	public boolean modify(PostDto dto) {
-		
-		// 나중에 로그인 한 유저 이름도 같이 받아서 비교 후 삭제처리하기
-		Optional<Post> optional = repository.findById(dto.getPostid());
-		
-		if(optional.isPresent()) {
-			Post entity = optional.get();
-			entity.setTitle(dto.getTitle());
-			entity.setContent(dto.getContent());
-			return true;
-		}
-		return false;
+	public boolean modify(PostDto dto, String email) {
+	    Optional<Post> optional = repository.findById(dto.getPostid());
+
+	    if (optional.isEmpty()) {
+	        return false;
+	    }
+	    Post post = optional.get();
+	    // 이메일을 서로 비교한다
+	    String writerEmail = post.getUserid().getEmail();
+	    
+	    if(!writerEmail.equals(email)) {
+	    	return false;
+	    }
+	    if(optional.isPresent()) {
+	    	post.setContent(dto.getContent());
+	    	post.setTitle(dto.getContent());
+	    	return true;
+	    }
+	    return false;
 	}
-//	public boolean modifter(PostDto dto, String loginNickname) {
-//	    Optional<Post> optional = repository.findById(dto.getPostid());
-//
-//	    if (optional.isEmpty()) {
-//	        return false;
-//	    }
-//	    Post post = optional.get();
-//	    String writerName = post.getUserid().getName();
-//	    
-//	    if(!writerName.equals(loginNickname)) {
-//	    	return false;
-//	    }
-//	    if(optional.isPresent()) {
-//	    	post.setContent(dto.getContent());
-//	    	post.setTitle(dto.getContent());
-//	    	return true;
-//	    }
-//	    return false;
-//	}
 	
 
 	@Override
-	public void remove(int postId) {
+	public boolean remove(int postId, String email) {
 		Optional<Post> result = repository.findById(postId);
 		
-		if(result.isPresent()) {
-			//Post post = result.get();
-			// 나중에 로그인 한 유저 이름도 같이 받아서 비교 후 삭제처리하기
-			//post.getUserid();
-			
-			repository.deleteById(postId);
+		if(result.isEmpty()) {
+			return false;
 		}
 		
+		Post post = result.get();
+		
+		String writeEmail = post.getUserid().getEmail();
+		
+		if(!writeEmail.equals(email)) {
+			return false;	
+		}
+		repository.delete(post);
+		
+		return true;
+		
 	}
-//	@Override
-//	public boolean remove(int postId, String loginNickname) {
-//	    Optional<Post> result = repository.findById(postId);
-//
-//	    if (result.isEmpty()) {
-//	        return false;
-//	    }
-//
-//	    Post post = result.get();
-//
-//	    // 게시글 작성자의 닉네임
-//	    String writerNickname = post.getUser().getNickname();
-//	    // 닉네임이 다르면 삭제 거부
-//	    if (!writerNickname.equals(loginNickname)) {
-//	        return false;
-//	    }
-//
-//	    repository.deleteById(postId);
-//	    return true;
-//	}
-	
 
 	
 	
@@ -184,6 +165,7 @@ public class PostServiceImpl implements PostService {
 	    return 0;
 	}
 	
+// 이건 좀 어려우니 천천히 헤걀
 //	@Override
 //	public int likePost(int postId, String nickname) {
 //	    Optional<User> userOpt = userRepository.findByNickname(nickname);
@@ -244,9 +226,9 @@ public class PostServiceImpl implements PostService {
 	
 	
 	@Override
-	public List<PostDto> getListUserName(String nickname) {
+	public List<PostDto> getListUserEmail(String nickname) {
 		
-		UserDto dto = userService.readByUserName(nickname);
+		UserDto dto = userService.readByEmail(nickname);
 		 
 		User user = User.builder()
 				.userid(dto.getUserid())

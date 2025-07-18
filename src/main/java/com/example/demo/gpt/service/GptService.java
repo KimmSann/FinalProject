@@ -44,7 +44,7 @@ public class GptService {
 
 		// 구성하기
 		JSONObject requestBody = new JSONObject();
-		requestBody.put("model", "gpt-4.1");
+		requestBody.put("model", "gpt-4");
 		requestBody.put("messages", messages);
 
 		// 요청 구성
@@ -58,9 +58,25 @@ public class GptService {
 		// api 호출
 		try {
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-			JSONObject jsonResponse = new JSONObject(response.body());
+			String rawBody = response.body();
 
-			// 컨텐츠 출력
+			System.out.println("GPT 응답 원문:\n" + rawBody);
+
+			JSONObject jsonResponse = new JSONObject(rawBody);
+
+			// 가끔 키값이 이상하거나 에러걸리면 안됨 다른 키 값으로 바꿨는데 한번 더 에러나면 물어보기
+			if (!jsonResponse.has("choices")) {
+				if (jsonResponse.has("error")) {
+					JSONObject error = jsonResponse.getJSONObject("error");
+					String errorMessage = error.optString("message", "Unknown error");
+					System.out.println(API_KEY);
+					return "[GPT 오류] " + errorMessage;
+				} else {
+					return "[GPT 오류] 알 수 없는 응답 형식입니다.";
+				}
+			}
+
+			// 정상 응답 처리
 			return jsonResponse
 					.getJSONArray("choices")
 					.getJSONObject(0)
@@ -69,7 +85,8 @@ public class GptService {
 
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
-			return "요약 중 오류가 발생했습니다.";
+			return "요약 중 예외가 발생했습니다.";
 		}
+
 	}
 }

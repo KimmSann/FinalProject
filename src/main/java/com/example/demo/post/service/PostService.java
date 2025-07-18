@@ -25,9 +25,9 @@ public interface PostService {
 	// 카테고리별 게시물 조회
 	Page<PostDto> category(int boardId, Pageable pageable);
 	
-	boolean modify(PostDto dto);
+	boolean modify(PostDto dto, String email);
 	
-	void remove(int postId);
+	boolean remove(int postId, String email);
 	
 	// 조회수 싫어요, 좋아요 수 관리
 	
@@ -39,7 +39,7 @@ public interface PostService {
 	
 	List<PostDto> getTop3Posts();
 	
-	List<PostDto> getListUserName(String nickname);
+	List<PostDto> getListUserEmail(String email);
 	
 	Page<PostDto> searchByKeyword(String keyword, Pageable pageable);
 

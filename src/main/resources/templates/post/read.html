@@ -158,7 +158,7 @@
 
       const commentDto = {
         postid: postId,
-        userid: 1,
+        userid: [[ ${ userDto.email } ]],
         content: commentContent
       };
 

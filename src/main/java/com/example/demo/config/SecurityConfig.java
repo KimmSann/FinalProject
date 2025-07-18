@@ -36,21 +36,15 @@ public class SecurityConfig {
                 .logoutSuccessUrl("/signin")
             );
         
-//	    http.authorizeHttpRequests()
-//        // 로그인해야만 접근 가능한 경로
-//        .requestMatchers("/cart/**", "/mypage/main").authenticated()
-//        // 등록은 권한이 판매자인 사람만 들어오게 하기
-//        
-//        // 권환을 확인하는 목록 : 물건 등록, 수정, 삭제, 주문목록수정
-//        .requestMatchers("/products/register")
-//        .hasAnyRole("SELLER")
-//        .requestMatchers("/products/modify")
-//        .hasAnyRole("SELLER")
-//        .requestMatchers("/products/remove")
-//        .hasAnyRole("SELLER")
-//        .requestMatchers("/mypage/orderlist")
-//        .hasAnyRole("SELLER")
-//        .anyRequest().permitAll();
+        // 권한에 따라서 접근권한 주기
+        // .requestMatchers("/admin/**").hasRole("ADMIN")  // ADMIN만 접근
+//        .requestMatchers("/my/**").hasAnyRole("ADMIN", "USER")  // USER 또는 ADMIN만 접근
+        
+        // 접근 거부시 
+//        .exceptionHandling(exception -> 
+//        exception.accessDeniedPage("/access-denied")
+//    )
+
 
         return http.build();
     }

@@ -1,5 +1,6 @@
 package com.example.demo.post.controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,6 @@ import com.example.demo.user.service.UserService;
 @RequestMapping("post")
 public class PostController {
 
-	
 	@Autowired
 	PostService postservice;
 	
@@ -36,15 +36,11 @@ public class PostController {
 	@Autowired
 	PostimgService postimgService;
 
-
-
-	
 	
 	@GetMapping("/read")
 	public void read(@RequestParam(name = "no") int postid, Model model) {
 		
-		// 댓글은 따로 컨트롤러에서 설정
-		
+		// 일단 클릭하면 조회수 증가
 		postservice.viewcount(postid);
 		// postid로 유저 아이디 찾기
 		PostDto postDto = postservice.read(postid);
@@ -70,13 +66,16 @@ public class PostController {
 	    @RequestParam(name = "content") String content,
 	    @RequestParam(name = "boardId") int boardId,
 	    @RequestParam(name = "files", required = false) MultipartFile[] files,
-	    RedirectAttributes redirectAttributes) {
+	    RedirectAttributes redirectAttributes,
+	    Principal principal) {
+		
+		UserDto userDto = userservice.readByEmail(principal.getName());
 
 	    PostDto dto = PostDto.builder()
 	            .title(title)
 	            .content(content)
 	            .boardid(boardId)
-	            .userid(1)
+	            .userid(userDto.getUserid())	// 시큐리티에서 받은 아이디로 저장
 	            .build();
 
 	    int registerNo = postservice.register(dto);
@@ -92,7 +91,8 @@ public class PostController {
 	            }
 	        }
 	    }
-
+	    
+	    // 사진이 있다면 등록 시작
 	    if (noFiles) {
 	        postimgService.savePostImage(registerNo, files);
 	    }
@@ -105,7 +105,8 @@ public class PostController {
 			@RequestParam(name = "postId") int postId,
 			@RequestParam(name = "content") String content,
 			@RequestParam(name = "title") String title,
-			@RequestParam(name = "newImage", required = false) MultipartFile[] file) {
+			@RequestParam(name = "newImage", required = false) MultipartFile[] file,
+			Principal principal) {
 		
 		PostDto postdto = PostDto.builder()
 				.postid(postId)	
@@ -113,7 +114,13 @@ public class PostController {
 				.title(title)
 				.build();
 		
-		postservice.modify(postdto);
+		boolean modiftState = postservice.modify(postdto, principal.getName());
+		
+		if(!modiftState) {
+			// 나중에 메시지 보내기
+			System.out.println("수정 실패");
+			return null;
+		}
 
 		boolean noFiles = false;
 	    // 파일에 아무것도 없으면 넘어가기
@@ -167,10 +174,18 @@ public class PostController {
 	}
 
 	@PostMapping("/remove")
-	public String remove(@RequestParam("postId") int postId, RedirectAttributes redirectAttributes) {
-	    postservice.remove(postId);
-	    redirectAttributes.addFlashAttribute("message", "게시글이 삭제되었습니다.");
-	    return "redirect:/";
+	public String remove(@RequestParam("postId") int postId,
+			RedirectAttributes redirectAttributes,
+			Principal principal) {
+		
+	    boolean removeState = postservice.remove(postId, principal.getName());
+	    if(removeState) {
+	    	redirectAttributes.addFlashAttribute("message", "게시글이 삭제되었습니다.");
+	    	return "redirect:/";	    	
+	    }
+	    else {
+			return "board/category";
+		}
 	}
 
 	

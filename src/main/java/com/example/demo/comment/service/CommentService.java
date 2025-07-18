@@ -13,9 +13,9 @@ public interface CommentService {
 	
 	List<CommentDto> getList(int postId);
 	
-	List<CommentDto> getListByNickname(String nickname);
+	List<CommentDto> getListByEmail(String nickname);
 	
-	boolean remove(int commentId);
+	boolean remove(int commentId, String email);
 	
 	
 	default CommentDto entityToDto(Comment comment) {

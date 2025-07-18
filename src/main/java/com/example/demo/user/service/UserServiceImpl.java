@@ -40,11 +40,6 @@ public class UserServiceImpl implements UserService {
                 .orElse(null);
     }
 
-    @Override
-    public UserDto readByUserName(String nickname) {
-        Optional<User> result = userRepository.findByNickname(nickname);
-        return result.map(this::entityToDto).orElse(null);
-    }
 
     @Override
     public UserDto login(String email, String password) {
@@ -58,7 +53,7 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
-    // 따로 s3fileutil에 String형태로 aws 에 저장했으니 현재걸로 병합해주세요*****
+    
     @Override
     public boolean signup(SignupDto dto, MultipartFile file) {
         if (userRepository.existsByEmail(dto.getEmail())) {
@@ -73,7 +68,6 @@ public class UserServiceImpl implements UserService {
                 .name(dto.getName())
                 .email(dto.getEmail())
                 .password(passwordEncoder.encode(dto.getPassword()))
-
                 .nickname(dto.getNickname()) // dto.getNickname() 사용
                 .role(dto.getRole())         // 폼에서 받은 role 반영
 

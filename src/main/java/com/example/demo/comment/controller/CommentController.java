@@ -5,6 +5,7 @@ import com.example.demo.comment.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -17,7 +18,7 @@ public class CommentController {
     
     // 로그인이 필요하다하기
     @PostMapping("/register")
-    public boolean register(@RequestBody CommentDto commentDto) {
+    public boolean register(@RequestBody CommentDto commentDto, Principal principal) {
     	// 나중에 dto.serwriter을 사용해서 이름을 미리 정해둠 뒤 출력
         int commentId = commentService.register(commentDto);
         System.out.println("테스트" + commentId);
@@ -33,7 +34,7 @@ public class CommentController {
     
     /** 댓글 삭제 */
     @DeleteMapping("/delete")
-    public boolean delete(@RequestParam(name = "commentId") int commentId) {
-        return commentService.remove(commentId);
+    public boolean delete(@RequestParam(name = "commentId") int commentId, Principal principal) {
+        return commentService.remove(commentId, principal.getName());
     }
 }

@@ -58,11 +58,9 @@ public class HomeController {
 	        boardPostMap.put(board.getBoardid(), posts);
 	    }
 	    
-	    String name = (principal != null) ? principal.getName() : "게스트";
 	    
 	    // 위와 비슷하게 좋아요순으로 정렬한 값 추출하기
 	    
-	    model.addAttribute("name", name);
 	    model.addAttribute("bestPost", bestPost);
 	    model.addAttribute("boardlist", boardlist);
 	    model.addAttribute("boardPostMap", boardPostMap);
@@ -71,16 +69,16 @@ public class HomeController {
 	
 	@GetMapping("/home/mypage")
 	public void mypage(Model model, Principal principal) {
-		String nickname = "기철이";
+		String email = principal.getName();
 		
 		// 출력 5개로 제한
-		UserDto userDto = userService.readByUserName(nickname);
-	    List<PostDto> postDto = postService.getListUserName(nickname)
+		UserDto userDto = userService.readByEmail(email);
+	    List<PostDto> postDto = postService.getListUserEmail(email)
 				                .stream()
 				                .limit(5)
 				                .collect(Collectors.toList());
 
-		List<CommentDto> commentDto = commentService.getListByNickname(nickname)
+		List<CommentDto> commentDto = commentService.getListByEmail(email)
 		                         .stream()
 		                         .limit(5)
 		                         .collect(Collectors.toList());
@@ -95,8 +93,8 @@ public class HomeController {
 		
 		//String name = principal.getName();
 		
-		String name = "길동이";
-		UserDto userDto = userService.readByUserName(name);
+		String email = principal.getName();
+		UserDto userDto = userService.readByEmail(email);
 		
 		model.addAttribute("userDto", userDto);
 		

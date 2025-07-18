@@ -2,8 +2,6 @@ package com.example.demo.user.service;
 
 import java.util.Optional;
 
-import com.example.demo.user.controller.UserController;
-import com.example.demo.user.dto.LoginDto;
 import com.example.demo.user.dto.SignupDto;
 import com.example.demo.user.dto.UserDto;
 import com.example.demo.user.entity.User;
@@ -26,7 +24,6 @@ public class UserServiceImpl implements UserService {
     
     @Autowired
     S3FileUtil fileUtil;
-
 
     @Override
     public boolean register(UserDto dto) {
@@ -61,6 +58,7 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    // 따로 s3fileutil에 String형태로 aws 에 저장했으니 현재걸로 병합해주세요*****
     @Override
     public boolean signup(SignupDto dto, MultipartFile file) {
         if (userRepository.existsByEmail(dto.getEmail())) {
@@ -83,24 +81,6 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         return true;  // 가입 성공 시 true 반환
     }
-    
-    
-	@Override
-	public boolean modify(UserDto dto) {
-		
-		// 어짜피 수정까지 가면 이미 인증은 되어있는 상태니깐 굳이같은지 확인 안하기
-		Optional<User> optional = userRepository.findById(dto.getUserid());
-		
-		if(optional.isPresent()) {
-			User entity = optional.get();
-			entity.setNickname(dto.getNickname());
-			entity.setProfileimg(dto.getProfileimg());
-			return true;
-			
-		}		
-		return false;
-	}
-	
 
     private User dtoToEntity(UserDto dto) {
         return User.builder()
@@ -127,6 +107,4 @@ public class UserServiceImpl implements UserService {
                 .createdate(entity.getCreatedate())
                 .build();
     }
-
-
 }

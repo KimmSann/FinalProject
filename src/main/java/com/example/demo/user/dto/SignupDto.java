@@ -9,10 +9,10 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SignupDto {
-    String name;
-    String email;
-    String password;
-    String nickname;
-    String profileName;
-    
+    private String name;
+    private String email;
+    private String password;
+    private String nickname;
+    private String role; 
+    private String profileimg;  // 따로 s3fileutil에 String형태로 aws 에 저장했으니 현재걸로 병합해주세요*****
 }

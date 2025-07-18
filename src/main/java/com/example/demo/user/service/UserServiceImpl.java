@@ -82,6 +82,24 @@ public class UserServiceImpl implements UserService {
         return true;  // 가입 성공 시 true 반환
     }
 
+    
+	@Override
+	public boolean modify(UserDto dto) {
+		
+		// 어짜피 수정까지 가면 이미 인증은 되어있는 상태니깐 굳이같은지 확인 안하기
+		Optional<User> optional = userRepository.findById(dto.getUserid());
+		
+		if(optional.isPresent()) {
+			User entity = optional.get();
+			entity.setNickname(dto.getNickname());
+			entity.setProfileimg(dto.getProfileimg());
+			return true;
+			
+		}		
+		return false;
+	}
+	
+	
     private User dtoToEntity(UserDto dto) {
         return User.builder()
                 .userid(dto.getUserid())
@@ -107,4 +125,6 @@ public class UserServiceImpl implements UserService {
                 .createdate(entity.getCreatedate())
                 .build();
     }
+
+
 }

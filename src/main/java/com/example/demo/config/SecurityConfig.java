@@ -34,8 +34,17 @@ public class SecurityConfig {
             .logout(logout -> logout
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/signin")
+                
             );
-        
+//            .oauth2Login(oauth2 -> 
+//            oauth2
+//                .userInfoEndpoint(userInfo -> 
+//                    userInfo.userService(customOAuth2MemberService())
+//                )
+//                .successHandler(oAuth2SuccessHandler())
+//                .failureHandler(oAuth2FailureHandler()) 
+//        );
+//        
 //	    http.authorizeHttpRequests()
 //        // 로그인해야만 접근 가능한 경로
 //        .requestMatchers("/cart/**", "/mypage/main").authenticated()

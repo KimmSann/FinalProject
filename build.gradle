@@ -49,6 +49,7 @@ dependencies {
 	//testImplementation 'org.springframework.security:spring-security-test'
 	testCompileOnly 'org.projectlombok:lombok:1.18.30'
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	
 	implementation 'org.json:json:20240303'
 	

@@ -27,9 +27,12 @@ public class User  {
     private String profileimg;
 
     private String role;
+    
+    private String loginType; // "local", "kakao", "google"
 
     private LocalDateTime createdate;
-
+    
+   
     @PrePersist
     public void prePersist() {
         this.createdate = LocalDateTime.now();

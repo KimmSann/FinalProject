@@ -97,4 +97,10 @@ public class UserServiceImpl implements UserService {
                 .createdate(entity.getCreatedate())
                 .build();
     }
+
+	@Override
+	public UserDto readByEmail(String email) {
+        Optional<User> result = userRepository.findByEmail(email);
+        return result.map(this::entityToDto).orElse(null);
+	}
 }

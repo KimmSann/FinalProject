@@ -15,5 +15,7 @@ public interface UserService {
     UserDto login(String email, String password);
     boolean signup(SignupDto dto);  
     
+    // 추가
+    UserDto readByEmail(String email);
     
 }

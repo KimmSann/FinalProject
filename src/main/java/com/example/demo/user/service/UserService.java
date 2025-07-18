@@ -14,4 +14,6 @@ public interface UserService {
     UserDto readByUserName(String nickname);
     UserDto login(String email, String password);
     boolean signup(SignupDto dto);  
+    
+    
 }

@@ -1,8 +1,10 @@
 package com.example.demo.postLike.entity;
 
 import com.example.demo.post.entity.Post;
+
 import com.example.demo.user.entity.User;
 
+import lombok.*;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -13,6 +15,12 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+@Builder
 @Table(name = "post_like")
 public class PostLike {
     

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <meta charset="UTF-8" />
   <title>OKKY Clone - 게시글 상세</title>
@@ -32,21 +33,33 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-        <ul class="navbar-nav">
-        <!-- 추후 추가 예정 -->
-          <li class="nav-item"><a class="nav-link" href="/board/category?boardId=1">게임 평가</a></li>
-          <li class="nav-item"><a class="nav-link" href="/board/category?boardId=2">자유게시판</a></li>
-          <li class="nav-item"><a class="nav-link" href="/board/category?boardId=3">QnA</a></li>
-          <li class="nav-item"><a class="nav-link" href="/signin">로그인</a></li>
-          <li class="nav-item"><a class="nav-link" href="/signup">회원가입</a></li>
-          <li class="nav-item"><a class="nav-link" href="/home/mypage">마이페이지</a></li>
-        </ul>
+		<ul class="navbar-nav">
+		  <li class="nav-item"><a class="nav-link" href="/board/category?boardId=1">게임 평가</a></li>
+		  <li class="nav-item"><a class="nav-link" href="/board/category?boardId=2">자유게시판</a></li>
+		  <li class="nav-item"><a class="nav-link" href="/board/category?boardId=3">QnA</a></li>
+		
+		  <!-- 로그인하지 않은 사용자만 -->
+		  <li class="nav-item" sec:authorize="!isAuthenticated()">
+		    <a class="nav-link" href="/signin">로그인</a>
+		  </li>
+		  <li class="nav-item" sec:authorize="!isAuthenticated()">
+		    <a class="nav-link" href="/signup">회원가입</a>
+		  </li>
+		
+		  <!-- 로그인한 사용자만 -->
+		  <li class="nav-item" sec:authorize="isAuthenticated()">
+		    <a class="nav-link" href="/home/mypage">마이페이지</a>
+		  </li>
+		  <li class="nav-item" sec:authorize="isAuthenticated()">
+		    <a class="nav-link" href="/logout">로그아웃</a>
+		  </li>
+		</ul>
       </div>
     </div>
   </nav>
 
   <!-- Main Content -->
-  <div class="container">
+<div class="container" id="post-container" th:data-post-id="${postDto.postid}">
     <!-- 게시글 헤더 -->
     <div class="post-header">
       <div class="post-title">[[ ${ postDto.title } ]]</div>
@@ -72,12 +85,17 @@
           <img th:src="${img.storedFileName}" alt="이미지">
         </div>
       </div>
-      <div class="tag-list mt-3">
-        <span class="badge bg-secondary">Java</span>
-        <span class="badge bg-secondary">Spring</span>
-        <span class="badge bg-secondary">질문</span>
-      </div>
     </div>
+    
+    <!-- gpt ai 값 불러옴 비동기로 -->
+	<div class="mt-5 p-3 border rounded bg-light d-flex align-items-start" id="ai-summary">
+	  <div class="me-3 fs-3">🤖</div>
+	  <div>
+	    <strong>AI 요약</strong>
+	    <p class="mb-0 text-muted">로딩 중...</p>
+	  </div>
+	</div>
+    
 
     <!-- 좋아요/싫어요 -->
     <div class="like-group">
@@ -115,9 +133,34 @@
 
   <!-- 댓글 관련 스크립트 -->
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      showComment();
-    });
+  document.addEventListener("DOMContentLoaded", () => {
+	    const postId = document.getElementById("post-container").dataset.postId;
+
+	    // 1. AI 요약 가져오기
+	    fetch(`/post/ai-summary?postId=${postId}`)
+	      .then(res => res.text())
+	      .then(summary => {
+	        const summaryDiv = document.querySelector("#ai-summary p");
+	        summaryDiv.textContent = summary;
+	        summaryDiv.classList.remove("text-muted");
+	      })
+	      .catch(err => {
+	        console.error("요약 실패", err);
+	        document.querySelector("#ai-summary p").textContent = "AI 요약을 불러오지 못했습니다.";
+	      });
+
+	    // 2. 댓글도 그 postId로 불러오기
+	    showComment(postId);
+
+	    // 댓글 등록 이벤트도 postId 사용
+	    document.querySelector("#commentContent").addEventListener("keydown", (e) => {
+	      if (e.key === "Enter" && !e.shiftKey) {
+	        registerComment(postId);
+	        e.preventDefault();
+	      }
+	    });
+	  });
+    
 
     function showComment() {
       const postId = [[${postDto.postid}]];
@@ -153,14 +196,14 @@
     }
 
     function registerComment() {
-      const postId = [[${postDto.postid}]];
+    	const postId = document.getElementById("post-container").dataset.postId;
       const commentContent = document.getElementById("commentContent").value;
 
       const commentDto = {
         postid: postId,
-        userid: [[ ${ userDto.email } ]],
+        userid: "[[${userDto.email}]]",
         content: commentContent
-      };
+      };	
 
       fetch('/comment/register', {
         method: 'POST',

@@ -24,6 +24,11 @@ public class SecurityConfig {
                 .requestMatchers("/", "/signin").permitAll()
                 .requestMatchers("/admin").hasRole("ADMIN")
                 .requestMatchers("/my/**").hasAnyRole("ADMIN", "USER")
+                // 여기에 로그인 안하면 못들어오는 경로 추가
+                .requestMatchers("/post/register", "/post/modify", "/post/like", "/post/unlike",
+                		"/post/remove", "/comment/register", "/comment/delete", "/home/mypage", 
+                		"/home/modify").authenticated()
+                
                 .anyRequest().permitAll()
             )
             .formLogin(form -> form
@@ -31,21 +36,11 @@ public class SecurityConfig {
                 .permitAll()
                 .defaultSuccessUrl("/", true)
             )
-            .logout(logout -> logout
+            .logout(logout -> logout 	
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/signin")
             );
         
-        // 권한에 따라서 접근권한 주기
-        // .requestMatchers("/admin/**").hasRole("ADMIN")  // ADMIN만 접근
-//        .requestMatchers("/my/**").hasAnyRole("ADMIN", "USER")  // USER 또는 ADMIN만 접근
-        
-        // 접근 거부시 
-//        .exceptionHandling(exception -> 
-//        exception.accessDeniedPage("/access-denied")
-//    )
-
-
         return http.build();
     }
 

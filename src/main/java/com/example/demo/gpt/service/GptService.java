@@ -60,7 +60,7 @@ public class GptService {
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 			String rawBody = response.body();
 
-			System.out.println("GPT 응답 원문:\n" + rawBody);
+//			System.out.println("GPT 응답 원문:\n" + rawBody);
 
 			JSONObject jsonResponse = new JSONObject(rawBody);
 

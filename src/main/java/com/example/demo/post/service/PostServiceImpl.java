@@ -25,7 +25,9 @@ import com.example.demo.util.S3FileUtil;
 @Service
 public class PostServiceImpl implements PostService {
 
-    private final UserRepository userRepository;
+	@Autowired
+	UserRepository userRepository;
+	
 	@Autowired 
 	PostRepository repository;
 
@@ -39,11 +41,6 @@ public class PostServiceImpl implements PostService {
 	// aws s3에 사진 저장
 	@Autowired
 	S3FileUtil fileUtil;
-
-
-    PostServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
 
 	@Override
@@ -149,65 +146,74 @@ public class PostServiceImpl implements PostService {
 	}
 	
 
-	@Override
-	public int likePost(int postId) {
-	    Optional<Post> optionalPost = repository.findById(postId);
-
-	    if (optionalPost.isPresent()) {
-	        Post entity = optionalPost.get();
-	        int updatedCount = entity.getLikecount() + 1;
-	        entity.setLikecount(updatedCount);
-	        repository.save(entity);
-
-	        return updatedCount;
-	    }
-
-	    return 0;
-	}
 	
 // 이건 좀 어려우니 천천히 헤걀
-//	@Override
-//	public int likePost(int postId, String nickname) {
-//	    Optional<User> userOpt = userRepository.findByNickname(nickname);
-//	    Optional<Post> postOpt = repository.findById(postId);
-//
-//	    if (userOpt.isEmpty() || postOpt.isEmpty()) return -1;
-//
-//	    User user = userOpt.get();
-//	    Post post = postOpt.get();
-//
-//	    boolean alreadyClicked = postLikeRepository.existsByUserAndPost(user, post);
-//	    if (alreadyClicked) return -1;
-//
-//	    // 좋아요 처리
-//	    int updatedCount = post.getLikecount() + 1;
-//	    post.setLikecount(updatedCount);
-//	    repository.save(post);
-//
-//	    // 기록 저장
-//	    PostLike like = new PostLike();
-//	    like.setUser(user);
-//	    like.setPost(post);
-//	    like.setLike(true);  // 좋아요 true
-//	    postLikeRepository.save(like);
-//
-//	    return updatedCount;
-//	}
+	@Override
+	public int likePost(int postId, String email) {
+		try {
+		    Optional<User> userOpt = userRepository.findByEmail(email);
+		    Optional<Post> postOpt = repository.findById(postId);
+
+		    if (userOpt.isEmpty() || postOpt.isEmpty()) return -1;
+
+		    User user = userOpt.get();
+		    Post post = postOpt.get();
+
+		    boolean alreadyClicked = postLikeRepository.existsByUserAndPost(user, post);
+		    if (alreadyClicked) return -1;
+
+		    // 좋아요 처리	
+		    int updatedCount = post.getLikecount() + 1;
+		    post.setLikecount(updatedCount);
+		    repository.save(post);
+
+		    // 기록 저장
+		    PostLike like = new PostLike();
+		    like.setUser(user);
+		    like.setPost(post);
+		    like.setLike(true);  // 좋아요 true
+		    postLikeRepository.save(like);
+
+		    return updatedCount;
+		} catch (Exception e) {
+			System.out.println("ERROR : " + e);
+			return 0;
+		}
+
+	}
 
 	@Override
-	public int unlikePost(int postId) {
-	    Optional<Post> optionalPost = repository.findById(postId);
+	public int unlikePost(int postId, String email) {
+		// 나중에 값이 들엉가있으면 처리 해보기
+		try {
+		    Optional<User> userOpt = userRepository.findByEmail(email);
+		    Optional<Post> postOpt = repository.findById(postId);
 
-	    if (optionalPost.isPresent()) {
-	        Post entity = optionalPost.get();
-	        int updatedCount = entity.getUnlikecount() + 1;
-	        entity.setUnlikecount(updatedCount);
-	        repository.save(entity);
+		    if (userOpt.isEmpty() || postOpt.isEmpty()) return -1;
 
-	        return updatedCount;
-	    }
+		    User user = userOpt.get();
+		    Post post = postOpt.get();
 
-	    return 0;
+		    boolean alreadyClicked = postLikeRepository.existsByUserAndPost(user, post);
+		    if (alreadyClicked) return -1;
+		    	
+		    // 싫어요 처리
+		    int updatedCount = post.getUnlikecount() + 1;
+		    post.setLikecount(updatedCount);
+		    repository.save(post);
+
+		    PostLike like = new PostLike();
+		    like.setUser(user);
+		    like.setPost(post);
+		    like.setLike(true);  // 좋아요 true
+		    postLikeRepository.save(like);
+
+		    return updatedCount;
+		} catch (Exception e) {
+			System.out.println("ERROR : " + e);
+			return 0;
+		}
+
 	}
 
 

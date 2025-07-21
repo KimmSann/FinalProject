@@ -33,9 +33,9 @@ public interface PostService {
 	
 	int viewcount(int postId);
 	
-	int likePost(int postId);
+	int likePost(int postId, String email);
 	
-	int unlikePost(int postId);
+	int unlikePost(int postId, String email);
 	
 	List<PostDto> getTop3Posts();
 	

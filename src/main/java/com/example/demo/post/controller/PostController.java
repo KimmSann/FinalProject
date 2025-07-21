@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.demo.comment.service.CommentService;
+import com.example.demo.gpt.service.GptService;
 import com.example.demo.post.dto.PostDto;
 import com.example.demo.post.service.PostService;
 import com.example.demo.postimg.dto.PostimgDto;
@@ -35,7 +37,16 @@ public class PostController {
 	
 	@Autowired
 	PostimgService postimgService;
+	
+	@Autowired
+	private GptService gptService;
 
+	@GetMapping("/ai-summary")
+	@ResponseBody
+	public String getAiSummary(@RequestParam("postId") int postId) {
+	    PostDto postDto = postservice.read(postId);
+	    return gptService.callGptApi(postDto.getContent()); // 요약 결과 반환
+	}
 	
 	@GetMapping("/read")
 	public void read(@RequestParam(name = "no") int postid, Model model) {
@@ -157,19 +168,28 @@ public class PostController {
 	
 	
 	@PostMapping("/like")
-	public String likePost(@RequestParam("postId") int postId, RedirectAttributes redirectAttributes) {
-	    int newCount = postservice.likePost(postId);
+	public String likePost(@RequestParam("postId") int postId, RedirectAttributes redirectAttributes, Principal principal) {
+	    int newCount = postservice.likePost(postId, principal.getName());
 	    System.out.println(newCount);
+	    if(newCount == -1) {
+	    	redirectAttributes.addFlashAttribute("message", "이미 평가를 완료한 게시물입니다. 👋");
+		    return "redirect:/post/read?no=" + postId;
+	    }
 	    redirectAttributes.addFlashAttribute("message", "좋아요가 눌렸습니다! 👍");
 	    return "redirect:/post/read?no=" + postId;
 	}
 
 	
 	@PostMapping("unlike")
-	public String unlikePost(@RequestParam("postId") int postId, RedirectAttributes redirectAttributes) {
-	    int newCount = postservice.unlikePost(postId);
+	public String unlikePost(@RequestParam("postId") int postId, RedirectAttributes redirectAttributes, Principal principal) {
+		String email = principal.getName();
+		int newCount = postservice.unlikePost(postId, email);
 	    System.out.println(newCount);
-	    redirectAttributes.addFlashAttribute("message", "싫어요가 눌렸습니다! 👎");
+	    if(newCount == -1) {
+	    	redirectAttributes.addFlashAttribute("message", "이미 평가를 완료한 게시물입니다. 👋");	    	
+	    	return "redirect:/post/read?no=" + postId;
+	    }
+    	redirectAttributes.addFlashAttribute("message", "싫어요가 눌렸습니다! 👎");
 	    return "redirect:/post/read?no=" + postId;
 	}
 

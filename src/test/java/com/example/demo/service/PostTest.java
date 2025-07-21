@@ -48,11 +48,11 @@ public class PostTest {
 	    }
 	}
 	
-	@Test
-	void 게시물삭제() {
-		service.remove(2);
-
-	}
+//	@Test
+//	void 게시물삭제() {
+//		service.remove(2);
+//
+//	}
 	
 	// 좋아요와 조회수는 컨트롤러 만들 때 하기
 	

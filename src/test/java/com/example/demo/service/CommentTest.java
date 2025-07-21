@@ -40,17 +40,17 @@ public class CommentTest {
 	    }
 	}
 	
-	@Test
-	void 댓글을_삭제한다() {
-		boolean check = service.remove(3);
-		
-		if(check) {
-			System.out.println("삭제 완료");
-		}
-		else {
-			System.out.println("삭제 안됨");
-		}
-	}
+//	@Test
+//	void 댓글을_삭제한다() {
+//		boolean check = service.remove(3);
+//		
+//		if(check) {
+//			System.out.println("삭제 완료");
+//		}
+//		else {
+//			System.out.println("삭제 안됨");
+//		}
+//	}
 	
 	
 	

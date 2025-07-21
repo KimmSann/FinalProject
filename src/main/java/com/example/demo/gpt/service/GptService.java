@@ -44,7 +44,7 @@ public class GptService {
 
 		// 구성하기
 		JSONObject requestBody = new JSONObject();
-		requestBody.put("model", "gpt-4");
+		requestBody.put("model", "gpt-4.1");
 		requestBody.put("messages", messages);
 
 		// 요청 구성

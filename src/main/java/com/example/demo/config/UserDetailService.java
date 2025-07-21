@@ -30,7 +30,7 @@ public class UserDetailService implements UserDetailsService {
   		UserDto user = service.readByEmail(email);
 
 		if(user == null) {
-			throw new UsernameNotFoundException(""); 
+			throw new UsernameNotFoundException("사용자를 찾을 수 없습니다"); 
 		} else {
 			// 왜? 로그인 성공 => 페이지 이동시 이전에 로그인한 사용자의 정보 보관
 			// 반환된 사용자 정보를 시큐리티가 보관하다가 필요할때 꺼내줌!

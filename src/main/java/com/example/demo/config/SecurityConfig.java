@@ -3,6 +3,7 @@ package com.example.demo.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.oauth2.client.OAuth2LoginConfigurer.UserInfoEndpointConfig;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,7 +12,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+	
 
+	
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     	
@@ -36,15 +39,15 @@ public class SecurityConfig {
                 .logoutSuccessUrl("/signin")
                 
             );
-//            .oauth2Login(oauth2 -> 
-//            oauth2
-//                .userInfoEndpoint(userInfo -> 
-//                    userInfo.userService(customOAuth2MemberService())
-//                )
-//                .successHandler(oAuth2SuccessHandler())
-//                .failureHandler(oAuth2FailureHandler()) 
-//        );
-//        
+//            .oauth2Login(form -> {
+//            	form
+//            			.loginPage("/signin")
+//            			.userInfoEndpoint(UserInfoEndpointConfig -> {
+//            				UserInfoEndpointConfig.userService(CustomOAuth2UserService);
+//            			});
+//            	
+//            });
+//      
 //	    http.authorizeHttpRequests()
 //        // 로그인해야만 접근 가능한 경로
 //        .requestMatchers("/cart/**", "/mypage/main").authenticated()

@@ -35,8 +35,6 @@ public class BoardController {
 			,@RequestParam(value = "keyword", required = false) String keyword
 			,Model model, Principal principal) {
 		
-
-		
 		Page<PostDto> postDto;
 		if(keyword != null && !keyword.trim().isEmpty()) {
 			postDto = postService.searchByKeyword(keyword, pageable);
@@ -44,13 +42,10 @@ public class BoardController {
 		else {
 			postDto = postService.category(boardId, pageable);
 		}
-		
-		// 그냥 클릭 시 viewcount 증가
-		
 		// 게시판 카테고리종류 가져옴
 		BoardDto boardDto = boardService.getBoardInfo(boardId);
 		
-		// 카테고리에 따른 게시물 가져
+		// 카테고리에 따른 게시물 가져오기
 		
 		// 모델의 포스트 값만 가져옴 이걸 출력하기
 		model.addAttribute("boardDto", boardDto);

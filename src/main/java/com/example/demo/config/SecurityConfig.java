@@ -36,6 +36,17 @@ public class SecurityConfig {
                 .permitAll()
                 .defaultSuccessUrl("/", true)
             )
+            // 로그인 한거 기억하기
+            .rememberMe(
+            		// 리멤버 키 꼭 필요하다고 함
+            		remember -> remember.key("veryimportkeymybe..113333**")
+            		// 로그인 정보 기억 체크박스 아이디
+            		.rememberMeParameter("remember-me")
+            		// 로그인 제한 시간 하루로 제안해둠
+            		// 테스트를 위해 1분으로 저장해둠
+            		// 60*60*24 = 하루
+            		.tokenValiditySeconds(60*60*24)
+            		)
             .logout(logout -> logout 	
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/signin")

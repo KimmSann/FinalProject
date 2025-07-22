@@ -43,7 +43,7 @@ public class Post {
 	@Column(length = 100)
 	String title;
 	
-	@Column(length = 200)
+	@Column(columnDefinition = "TEXT")
 	String content;
 	
 	@Column

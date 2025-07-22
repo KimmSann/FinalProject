@@ -9,4 +9,5 @@ import com.example.demo.user.entity.User;
 public interface PostLikeRepository extends JpaRepository<PostLike, Integer>{
 	
     boolean existsByUserAndPost(User user, Post post);
+    void deleteByPost(Post post);
 }

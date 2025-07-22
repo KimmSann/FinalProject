@@ -27,7 +27,7 @@ public class CommentServiceImpl implements CommentService{
 	@Override
 	public int register(CommentDto dto) {
 		try {
-			Comment entity = dtoToEntity(dto); 	
+			Comment entity = dtoToEntity(dto);
 			repository.save(entity);
 			
 			return entity.getCommentid();			

@@ -14,13 +14,14 @@ import com.example.demo.postimg.dto.PostimgDto;
 import com.example.demo.postimg.entity.Postimg;
 import com.example.demo.postimg.repository.PostimgRepository;
 // import com.example.demo.util.S3FileUtil;
+import com.example.demo.util.S3FileUtil;
 
 @Service
 public class PostimgServiceImpl implements PostimgService {
 	
 	// AWS S3 기능 제거를 위한 주석 처리
-	// @Autowired
-	// S3FileUtil fileUtil;
+	 @Autowired
+	 S3FileUtil fileUtil;
 
 	@Autowired
 	PostimgRepository repository;
@@ -36,9 +37,8 @@ public class PostimgServiceImpl implements PostimgService {
 		
 		// 파일의 수만큼 반복해서 저장
 		for (MultipartFile mulFile : file) {
-			// AWS 업로드 기능 제거 -> 임시 URL 대체
-			// String url = fileUtil.fileUpload(mulFile);
-			String url = "임시_파일_URL";  // 실제 저장하지 않고 임시 문자열 사용
+			
+			String url = fileUtil.fileUpload(mulFile);
 
 			Postimg postimg = Postimg.builder()
 					.storedFileName(url)
@@ -71,7 +71,8 @@ public class PostimgServiceImpl implements PostimgService {
 		Post entity = Post.builder()
 				.postid(postId)
 				.build();
-
+		
+		// jpa로 일단 다시 지우고 다시 생성
 		repository.deleteByPostid(entity);
 		savePostImage(postId, files);
 	}

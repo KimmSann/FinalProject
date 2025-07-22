@@ -9,12 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.demo.board.entity.Board;
+import com.example.demo.comment.repository.CommentRepository;
 import com.example.demo.post.dto.PostDto;
 import com.example.demo.post.entity.Post;
 import com.example.demo.post.repository.PostRepository;
 import com.example.demo.postLike.entity.PostLike;
 import com.example.demo.postLike.repository.PostLikeRepository;
+import com.example.demo.postimg.repository.PostimgRepository;
 import com.example.demo.user.dto.UserDto;
 import com.example.demo.user.entity.User;
 import com.example.demo.user.repository.UserRepository;
@@ -24,6 +28,7 @@ import com.example.demo.util.S3FileUtil;
 
 @Service
 public class PostServiceImpl implements PostService {
+
 
 	@Autowired
 	UserRepository userRepository;
@@ -36,6 +41,12 @@ public class PostServiceImpl implements PostService {
 	
 	@Autowired
 	PostLikeRepository postLikeRepository;
+	
+	@Autowired
+	PostimgRepository postimgRepository;
+	
+	@Autowired
+	CommentRepository commentRepository;
 	
 	
 	// aws s3에 사진 저장
@@ -79,49 +90,70 @@ public class PostServiceImpl implements PostService {
 		}
 	}
 
-	
+	@Transactional
 	@Override
 	public boolean modify(PostDto dto, String email) {
-	    Optional<Post> optional = repository.findById(dto.getPostid());
+		try {
+		    Optional<Post> optional = repository.findById(dto.getPostid());
+		    Post post = optional.get();
 
-	    if (optional.isEmpty()) {
-	        return false;
-	    }
-	    Post post = optional.get();
-	    // 이메일을 서로 비교한다
-	    String writerEmail = post.getUserid().getEmail();
-	    
-	    if(!writerEmail.equals(email)) {
-	    	return false;
-	    }
-	    if(optional.isPresent()) {
-	    	post.setContent(dto.getContent());
-	    	post.setTitle(dto.getContent());
-	    	return true;
-	    }
-	    return false;
-	}
-	
-
-	@Override
-	public boolean remove(int postId, String email) {
-		Optional<Post> result = repository.findById(postId);
-		
-		if(result.isEmpty()) {
+		    if (optional.isEmpty()) {
+		        return false;
+		    }
+		    // 이메일을 서로 비교한다
+		    String writerEmail = post.getUserid().getEmail();
+		    
+		    if(!writerEmail.equals(email)) {
+		    	return false;
+		    }
+		    if(optional.isPresent()) {
+		    	post.setContent(dto.getContent());
+		    	post.setTitle(dto.getTitle());
+		    	repository.save(post);
+		    	return true;
+		    }
+		    return false;
+		} catch (Exception e) {
+			System.out.println("ERROR : " + e);
 			return false;
 		}
-		
-		Post post = result.get();
-		
-		String writeEmail = post.getUserid().getEmail();
-		
-		if(!writeEmail.equals(email)) {
-			return false;	
-		}
-		repository.delete(post);
-		
-		return true;
-		
+
+	}
+	
+	@Transactional
+	@Override
+	public boolean remove(int postId, String email) {
+	    try {
+	        Optional<Post> result = repository.findById(postId);
+
+	        if (result.isEmpty()) return false;
+
+	        Post post = result.get();
+
+	        String writeEmail = post.getUserid().getEmail();
+	        if (!writeEmail.equals(email)) {
+	        	return false;
+	        }
+	        
+	        Post entity = post.builder()
+	        		.postid(postId)
+	        		.build();
+	        
+	        // 댓글 삭제
+	        commentRepository.deleteByPost(post);
+	        // 이미지 삭제
+	        postimgRepository.deleteByPostid(entity);
+	        // 좋아요 삭제
+	        postLikeRepository.deleteByPost(post);
+
+	        // 그 후 게시글 삭제
+	        repository.delete(post);
+
+	        return true;
+	    } catch (Exception e) {
+	        System.out.println("ERROR : " + e);
+	        return false;
+	    }
 	}
 
 	
@@ -147,20 +179,19 @@ public class PostServiceImpl implements PostService {
 	
 
 	
-// 이건 좀 어려우니 천천히 헤걀
 	@Override
-	public int likePost(int postId, String email) {
+	public boolean likePost(int postId, String email) {
 		try {
 		    Optional<User> userOpt = userRepository.findByEmail(email);
 		    Optional<Post> postOpt = repository.findById(postId);
 
-		    if (userOpt.isEmpty() || postOpt.isEmpty()) return -1;
+		    if (userOpt.isEmpty() || postOpt.isEmpty()) return false;
 
 		    User user = userOpt.get();
 		    Post post = postOpt.get();
 
 		    boolean alreadyClicked = postLikeRepository.existsByUserAndPost(user, post);
-		    if (alreadyClicked) return -1;
+		    if (alreadyClicked) return false;
 
 		    // 좋아요 처리	
 		    int updatedCount = post.getLikecount() + 1;
@@ -174,32 +205,32 @@ public class PostServiceImpl implements PostService {
 		    like.setLike(true);  // 좋아요 true
 		    postLikeRepository.save(like);
 
-		    return updatedCount;
+		    return true;
 		} catch (Exception e) {
 			System.out.println("ERROR : " + e);
-			return 0;
+			return false;
 		}
 
 	}
 
 	@Override
-	public int unlikePost(int postId, String email) {
+	public boolean unlikePost(int postId, String email) {
 		// 나중에 값이 들엉가있으면 처리 해보기
 		try {
 		    Optional<User> userOpt = userRepository.findByEmail(email);
 		    Optional<Post> postOpt = repository.findById(postId);
 
-		    if (userOpt.isEmpty() || postOpt.isEmpty()) return -1;
+		    if (userOpt.isEmpty() || postOpt.isEmpty()) return false;
 
 		    User user = userOpt.get();
 		    Post post = postOpt.get();
 
 		    boolean alreadyClicked = postLikeRepository.existsByUserAndPost(user, post);
-		    if (alreadyClicked) return -1;
+		    if (alreadyClicked) return false;
 		    	
 		    // 싫어요 처리
 		    int updatedCount = post.getUnlikecount() + 1;
-		    post.setLikecount(updatedCount);
+		    post.setUnlikecount(updatedCount);
 		    repository.save(post);
 
 		    PostLike like = new PostLike();
@@ -208,10 +239,10 @@ public class PostServiceImpl implements PostService {
 		    like.setLike(true);  // 좋아요 true
 		    postLikeRepository.save(like);
 
-		    return updatedCount;
+		    return true;
 		} catch (Exception e) {
 			System.out.println("ERROR : " + e);
-			return 0;
+			return false;
 		}
 
 	}

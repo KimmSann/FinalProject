@@ -38,14 +38,15 @@ public class PostController {
 	@Autowired
 	PostimgService postimgService;
 	
-	@Autowired
-	private GptService gptService;
+//	@Autowired
+//	private GptService gptService;
 
 	@GetMapping("/ai-summary")
 	@ResponseBody
 	public String getAiSummary(@RequestParam("postId") int postId) {
-	    PostDto postDto = postservice.read(postId);
-	    return gptService.callGptApi(postDto.getContent()); // 요약 결과 반환
+	    //PostDto postDto = postservice.read(postId);
+		//return gptService.callGptApi(postDto.getContent()); // 요약 결과 출력
+		return "gpt 비용 절약을 위한 일시적으로 잠금";
 	}
 	
 	@GetMapping("/read")
@@ -140,7 +141,7 @@ public class PostController {
 	            if (f != null && !f.isEmpty()) {
 	            	noFiles = true;
 	                break;
-	            }
+	            } 	
 	        }
 	    }
 	    if (noFiles) {
@@ -156,26 +157,36 @@ public class PostController {
 	
 	
 	@GetMapping("/modify")
-	public void modify(@RequestParam(name = "postId") int postId, Model model) {
-		// 닉네임을 가져옴
-		PostDto postDto = postservice.read(postId);
-		UserDto userDto = userservice.read(postDto.getUserid());
-		postDto.setNickname(userDto.getNickname());
-		List<PostimgDto> postimgDto = postimgService.getPostImages(postId);
-		model.addAttribute("postDto",postDto);
-		model.addAttribute("postimgDto", postimgDto);
+	public String modify(@RequestParam(name = "postId") int postId, Model model, Principal principal, RedirectAttributes redirectAttributes) {
+	    PostDto postDto = postservice.read(postId);
+
+	    UserDto writerDto = userservice.read(postDto.getUserid());
+
+	    String loginUserEmail = principal.getName();
+
+	    if (loginUserEmail.equals(writerDto.getEmail())) {
+	        postDto.setNickname(writerDto.getNickname());
+	        List<PostimgDto> postimgDto = postimgService.getPostImages(postId);
+	        model.addAttribute("postDto", postDto);
+	        model.addAttribute("postimgDto", postimgDto);
+	        return "post/modify";
+	    } else {
+	    	redirectAttributes.addFlashAttribute("message", "접근할 수 없습니다.");
+	    	return "redirect:/";
+	    }
 	}
 	
 	
 	@PostMapping("/like")
 	public String likePost(@RequestParam("postId") int postId, RedirectAttributes redirectAttributes, Principal principal) {
-	    int newCount = postservice.likePost(postId, principal.getName());
-	    System.out.println(newCount);
-	    if(newCount == -1) {
+	    String email = principal.getName();
+		boolean newCount = postservice.likePost(postId, email);
+	    if(!newCount) {
 	    	redirectAttributes.addFlashAttribute("message", "이미 평가를 완료한 게시물입니다. 👋");
-		    return "redirect:/post/read?no=" + postId;
-	    }
-	    redirectAttributes.addFlashAttribute("message", "좋아요가 눌렸습니다! 👍");
+		}
+	    else {
+	    	redirectAttributes.addFlashAttribute("message", "좋아요가 눌렸습니다! 👍");			
+		}
 	    return "redirect:/post/read?no=" + postId;
 	}
 
@@ -183,20 +194,20 @@ public class PostController {
 	@PostMapping("unlike")
 	public String unlikePost(@RequestParam("postId") int postId, RedirectAttributes redirectAttributes, Principal principal) {
 		String email = principal.getName();
-		int newCount = postservice.unlikePost(postId, email);
-	    System.out.println(newCount);
-	    if(newCount == -1) {
+		boolean newCount = postservice.unlikePost(postId, email);
+	    if(!newCount) {
 	    	redirectAttributes.addFlashAttribute("message", "이미 평가를 완료한 게시물입니다. 👋");	    	
-	    	return "redirect:/post/read?no=" + postId;
 	    }
-    	redirectAttributes.addFlashAttribute("message", "싫어요가 눌렸습니다! 👎");
-	    return "redirect:/post/read?no=" + postId;
+	    else {
+	    	redirectAttributes.addFlashAttribute("message", "싫어요가 눌렸습니다! 👎");
+		}
+	    return "redirect:/post/read?no=" + postId;			
 	}
 
 	@PostMapping("/remove")
 	public String remove(@RequestParam("postId") int postId,
 			RedirectAttributes redirectAttributes,
-			Principal principal) {
+			Principal principal) {	
 		
 	    boolean removeState = postservice.remove(postId, principal.getName());
 	    if(removeState) {
@@ -204,11 +215,10 @@ public class PostController {
 	    	return "redirect:/";	    	
 	    }
 	    else {
-			return "board/category";
+	    	redirectAttributes.addFlashAttribute("message", "삭제가 불가능합니다.");
+			return "redirect:/";
 		}
 	}
-
-	
 	
 	
 }

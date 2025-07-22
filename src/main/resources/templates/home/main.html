@@ -110,6 +110,10 @@
 
     </div>
   </div>
+  
+  <script th:if="${message != null}">
+  	alert('[[${ message }]]');
+  </script>
 
   <!-- Footer -->
   <footer class="text-center mt-5 mb-3">

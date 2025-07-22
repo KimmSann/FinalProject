@@ -3,7 +3,7 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <meta charset="UTF-8" />
-  <title>With Game - 글 작성</title>
+  <title>game community - 글 작성</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body { padding-top: 70px; }
@@ -46,10 +46,9 @@
   </nav>
   
 
-  <!-- Main Content -->
   <div class="container">
     <h2 class="mb-4">글 작성하기</h2>
-    <!-- 나중에 이미지 저장을 위한 enctype="multipart/form-data" 추가 나중에 -->
+    <!-- 나중에 이미지 저장을 위한 enctype="multipart/form-data" 추가 나중에...... -->
 	<!-- 글 작성 폼 시작 -->
 		<form action="/post/register" method="post" enctype="multipart/form-data">
 		  <!-- 게시판 선택 -->
@@ -57,9 +56,9 @@
 		    <label for="boardId" class="form-label">게시판 선택</label>
 		    <select class="form-select" id="boardId" name="boardId" required>
 		      <option value="" disabled selected>게시판을 선택하세요</option>
-		      <option value="1">Q&A</option>
+		      <option value="1">게임 평가</option>
 		      <option value="2">자유게시판</option>
-		      <option value="3">게임 리뷰</option>
+		      <option value="3">Q&A</option>
 		    </select>
 		  </div>
 		
@@ -73,7 +72,6 @@
 		    <textarea class="form-control" id="content" name="content" placeholder="내용을 입력하세요" required></textarea>
 		  </div>
 		
-		  <!-- 이미지 업로드 필드 추가 -->
 		  <div class="mb-3">
 		    <label for="files" class="form-label">이미지 첨부</label>
 		    <input class="form-control" type="file" id="files" name="files" multiple>
@@ -83,7 +81,6 @@
 		  <button type="submit" class="btn btn-primary">등록</button>
 		  <button type="button" class="btn btn-secondary" onclick="history.back()">취소</button>
 		</form>
-	<!-- 글 작성 폼 끝 -->
 
   </div>
 

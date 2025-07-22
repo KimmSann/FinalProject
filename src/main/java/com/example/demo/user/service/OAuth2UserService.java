@@ -18,6 +18,8 @@ import com.example.demo.user.repository.UserRepository;
 
 @Service
 public class OAuth2UserService extends DefaultOAuth2UserService {
+	
+	
 
     @Autowired
     private UserRepository userRepository;

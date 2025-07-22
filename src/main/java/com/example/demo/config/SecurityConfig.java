@@ -5,6 +5,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.oauth2.client.OAuth2LoginConfigurer.UserInfoEndpointConfig;
 import org.springframework.security.web.SecurityFilterChain;
+
+import com.example.demo.user.service.OAuth2UserService;
+
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,6 +15,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+	
+	 private final OAuth2UserService oAuth2UserService;
+
+	    public SecurityConfig(OAuth2UserService oAuth2UserService) {
+	        this.oAuth2UserService = oAuth2UserService;
+	    }
 	
 
 	
@@ -38,15 +47,15 @@ public class SecurityConfig {
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/signin")
                 
-            );
-//            .oauth2Login(form -> {
-//            	form
-//            			.loginPage("/signin")
-//            			.userInfoEndpoint(UserInfoEndpointConfig -> {
-//            				UserInfoEndpointConfig.userService(CustomOAuth2UserService);
-//            			});
-//            	
-//            });
+            )
+            .oauth2Login(form -> {
+            	form
+            			.loginPage("/signin")
+            			.userInfoEndpoint(UserInfoEndpointConfig -> {
+            				UserInfoEndpointConfig.userService(oAuth2UserService);
+            			});
+            	
+            });
 //      
 //	    http.authorizeHttpRequests()
 //        // 로그인해야만 접근 가능한 경로

@@ -36,6 +36,7 @@ public class SecurityConfig {
                 .requestMatchers("/", "/signin").permitAll()
                 .requestMatchers("/admin").hasRole("ADMIN")
                 .requestMatchers("/my/**").hasAnyRole("ADMIN", "USER")
+//                .requestMatchers("/post/remove/**").hasRole("ADMIN")// 게시물 삭제 권한
                 .anyRequest().permitAll()
             )
             .formLogin(form -> form

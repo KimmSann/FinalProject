@@ -28,7 +28,7 @@ public class User  {
 
     private String role;
     
-    private String loginType; // "local", "kakao", "google"
+    private String loginType; // "local", "kakao"
 
     private LocalDateTime createdate;
     

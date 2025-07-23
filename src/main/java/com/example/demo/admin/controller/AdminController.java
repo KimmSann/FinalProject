@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.demo.comment.service.CommentService;
 import com.example.demo.post.service.PostService;
 import com.example.demo.user.service.UserService;
+import com.example.demo.post.repository.PostRepository;
 
 
 import lombok.RequiredArgsConstructor;
@@ -23,12 +24,12 @@ public class AdminController {
     private final PostService postService;
     private final CommentService commentService;
 
-//    @GetMapping("/dashboard")
-//    public String dashboard(Model model) {
-//        model.addAttribute("users", userService.findAll());
-//        model.addAttribute("posts", postService.findAll());
-//        model.addAttribute("comments", commentService.findAll());
-//        return "admin/dashboard"; // templates/admin/dashboard.html
-//    }
+    @GetMapping("/dashboard")
+    public String dashboard(Model model) {
+        model.addAttribute("users", userService.findAll());
+        model.addAttribute("posts", postService.findAll());
+        model.addAttribute("comments", commentService.findAll());
+        return "admin/dashboard"; // templates/admin/dashboard.html
+    }
 
 }

@@ -310,4 +310,10 @@ public class PostServiceImpl implements PostService {
 	    return postdto;
 	    
 	}
+
+
+	@Override
+	public List<PostDto> findAll() {
+		return getList();
+	}
 }

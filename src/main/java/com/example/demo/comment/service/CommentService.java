@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.example.demo.comment.dto.CommentDto;
 import com.example.demo.comment.entity.Comment;
+import com.example.demo.post.dto.PostDto;
 import com.example.demo.post.entity.Post;
 import com.example.demo.user.entity.User;
 
@@ -54,5 +55,7 @@ public interface CommentService {
 		
 		return comment;
 	}
+	List<CommentDto> findAll();
+
 	
 }

@@ -53,7 +53,7 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
                     .name("카카오사용자")
                     .nickname("카카오닉네임")
                     .profileimg("default.png")
-                    .role("user")
+                    .role("ROLE_ADMIN")
                     .loginType("kakao")
                     .createdate(LocalDateTime.now())
                     .build();

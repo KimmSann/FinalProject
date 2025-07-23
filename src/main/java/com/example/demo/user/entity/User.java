@@ -29,14 +29,15 @@ public class User  {
     private String role = "USER"; // 고정값
     
     private String loginType; // "local", "kakao"
+    
+    private boolean isBanned = false; // 밴 여부
 
     private LocalDateTime createdate;
     
-   
     @PrePersist
     public void prePersist() {
         this.createdate = LocalDateTime.now();
-        this.role = this.role == null ? "USER" : this.role;
-        this.profileimg = this.profileimg == null ? "default.png" : this.profileimg;
     }
+   
+  
 }

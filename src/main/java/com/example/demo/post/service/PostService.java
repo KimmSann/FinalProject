@@ -91,6 +91,8 @@ public interface PostService {
 		
 		return post;
 	}
+	
+	List<PostDto> findAll();
 
 	
 	

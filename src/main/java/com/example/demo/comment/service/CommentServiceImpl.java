@@ -129,5 +129,21 @@ public class CommentServiceImpl implements CommentService{
 //	    return true;
 //	}
 //
+	@Override
+	public List<CommentDto> findAll() {
+	    List<Comment> entityList = repository.findAll();  
+
+	    List<CommentDto> dtoList = entityList.stream()
+	        .map(entity -> {
+	            CommentDto dto = entityToDto(entity);
+	            int userId = dto.getUserid();
+	            UserDto userDto = userService.read(userId);
+	            dto.setNickname(userDto.getNickname());
+	            return dto;
+	        })
+	        .collect(Collectors.toList());
+
+	    return dtoList;
+	}
 
 }

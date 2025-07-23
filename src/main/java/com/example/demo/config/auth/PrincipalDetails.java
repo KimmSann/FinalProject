@@ -52,6 +52,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
     @Override
     public boolean isEnabled() { return true; }
+    
 
     // OAuth2User용 메서드
     @Override

@@ -1,6 +1,8 @@
 package com.example.demo.user.service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.example.demo.user.dto.SignupDto;
 import com.example.demo.user.dto.UserDto;
@@ -59,6 +61,7 @@ public class UserServiceImpl implements UserService {
     }
 
     // 따로 s3fileutil에 String형태로 aws 에 저장했으니 현재걸로 병합해주세요*****
+    
     @Override
     public boolean signup(SignupDto dto, MultipartFile file) {
         if (userRepository.existsByEmail(dto.getEmail())) {
@@ -138,6 +141,15 @@ public class UserServiceImpl implements UserService {
         return result.map(this::entityToDto).orElse(null);
 	}
 
+	
+
+	@Override
+	public List<UserDto> findAll() {
+	    List<User> users = userRepository.findAll();
+	    return users.stream()
+	                .map(UserDto::new) 
+	                .collect(Collectors.toList());
+	}
 	@Override
 	public boolean signup(SignupDto dto) {
 		// TODO Auto-generated method stub

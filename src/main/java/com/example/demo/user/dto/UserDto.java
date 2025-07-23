@@ -24,7 +24,7 @@ public class UserDto {
 	
 	String nickname;
 	
-	private String profileimg;
+	String profileimg;
 	
 	String role;
 	

@@ -92,6 +92,7 @@ public class UserServiceImpl implements UserService {
 			User entity = optional.get();
 			entity.setNickname(dto.getNickname());
 			entity.setProfileimg(dto.getProfileimg());
+			userRepository.save(entity);
 			return true;
 			
 		}		

@@ -1,5 +1,6 @@
 package com.example.demo.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -11,11 +12,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+	
+	@Value("${ remember-key }")
+	private String rememberKey;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     	
-    	// 댓글 달기, 좋아요, 싫어요, post.register modify, 마이페이지 이렇게 로그인 안하면 막기
+    	// 댓글 달기, 좋아요, 싫어요, post.register modify, 마이페이지 이렇게 로그인 안하면 막아두기 (끝)
     	
         http
             .csrf(csrf -> csrf.disable())
@@ -23,6 +27,7 @@ public class SecurityConfig {
                 .requestMatchers("/signin", "/register", "/css/**", "/js/**", "/images/**").permitAll()
                 .requestMatchers("/", "/signin").permitAll()
                 .requestMatchers("/admin").hasRole("ADMIN")
+                // 이건 대채 뭐죠
                 .requestMatchers("/my/**").hasAnyRole("ADMIN", "USER")
                 // 여기에 로그인 안하면 못들어오는 경로 추가
                 .requestMatchers("/post/register", "/post/modify", "/post/like", "/post/unlike",
@@ -38,13 +43,11 @@ public class SecurityConfig {
             )
             // 로그인 한거 기억하기
             .rememberMe(
-            		// 리멤버 키 꼭 필요하다고 함
-            		remember -> remember.key("veryimportkeymybe..113333**")
+            		remember -> remember.key(rememberKey)
             		// 로그인 정보 기억 체크박스 아이디
             		.rememberMeParameter("remember-me")
             		// 로그인 제한 시간 하루로 제안해둠
-            		// 테스트를 위해 1분으로 저장해둠
-            		// 60*60*24 = 하루
+            		// 하루 간격으로 쿠키 삭제됨
             		.tokenValiditySeconds(60*60*24)
             		)
             .logout(logout -> logout 	

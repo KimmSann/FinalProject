@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.board.dto.BoardDto;
 import com.example.demo.board.service.BoardService;
@@ -42,7 +43,6 @@ public class HomeController {
 	@Autowired
 	S3FileUtil fileUtil;
 	
-	
 	@GetMapping("/")
 	public String home(Model model, Principal principal) {
 		List<PostDto> bestPost = postService.getTop3Posts();
@@ -57,8 +57,6 @@ public class HomeController {
 	            .collect(Collectors.toList());
 	        boardPostMap.put(board.getBoardid(), posts);
 	    }
-	    
-	    
 	    // 위와 비슷하게 좋아요순으로 정렬한 값 추출하기
 	    
 	    model.addAttribute("bestPost", bestPost);
@@ -91,8 +89,6 @@ public class HomeController {
 	@GetMapping("/home/modify")
 	public void mypageModfy(Model model, Principal principal) {
 		
-		//String name = principal.getName();
-		
 		String email = principal.getName();
 		UserDto userDto = userService.readByEmail(email);
 		
@@ -103,23 +99,29 @@ public class HomeController {
 	@PostMapping("/home/modify")
 	public String changePage(
 			@RequestParam(name = "nickname") String nickname
-			,@RequestParam(name = "files") MultipartFile files){
+			,@RequestParam(name = "files") MultipartFile files
+			,RedirectAttributes redirectAttributes
+			,Principal principal){
 		
-		String filename = fileUtil.fileUpload(files);
+		String filename = null;
+		UserDto userDto = userService.readByEmail(principal.getName());
+		
+		if(files != null && !files.isEmpty()) {
+			// 파일을 s3에 저장해둠
+			filename = fileUtil.fileUpload(files);			
+		}
 		
 		UserDto dto = UserDto.builder()
+				.userid(userDto.getUserid())
 				.profileimg(filename)
 				.nickname(nickname)
 				.build();	
+		
 		boolean modifyCheck = userService.modify(dto);
 		
 		if(modifyCheck) {
-			return "home/modify";
+			return "redirect:/home/mypage";
 		}
-		
-		// 나중에 리다이렉트
-		return "home/mypage";
+		return "redirect:/home/mypage";
 	}
-
-
 }

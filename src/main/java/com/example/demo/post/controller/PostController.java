@@ -147,14 +147,9 @@ public class PostController {
 	    if (noFiles) {
 	        postimgService.modify(postId, file);
 	    }
-		
-
-		
 		return "redirect:/";
 	}
-	
-	
-	
+
 	
 	@GetMapping("/modify")
 	public String modify(@RequestParam(name = "postId") int postId, Model model, Principal principal, RedirectAttributes redirectAttributes) {

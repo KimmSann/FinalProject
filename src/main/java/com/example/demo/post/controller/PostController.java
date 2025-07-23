@@ -44,8 +44,12 @@ public class PostController {
 	@GetMapping("/ai-summary")
 	@ResponseBody
 	public String getAiSummary(@RequestParam("postId") int postId) {
-	    //PostDto postDto = postservice.read(postId);
-		//return gptService.callGptApi(postDto.getContent()); // 요약 결과 출력
+//	    PostDto postDto = postservice.read(postId);
+//	    
+//	    String answer = gptService.callGptApi(postDto.getContent());
+//		
+//		return answer; // 요약 결과 출력
+		// 유현재가 따로 gpt api 결제해서 생성했습니다. 막 사용하지 말아주세요
 		return "gpt 비용 절약을 위한 일시적으로 잠금";
 	}
 	

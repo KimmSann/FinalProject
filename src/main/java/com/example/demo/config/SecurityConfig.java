@@ -12,9 +12,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-	
-	@Value("${ remember-key }")
-	private String rememberKey;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -43,7 +40,7 @@ public class SecurityConfig {
             )
             // 로그인 한거 기억하기
             .rememberMe(
-            		remember -> remember.key(rememberKey)
+            		remember -> remember.key("veryimportkeymybe..113333**")
             		// 로그인 정보 기억 체크박스 아이디
             		.rememberMeParameter("remember-me")
             		// 로그인 제한 시간 하루로 제안해둠

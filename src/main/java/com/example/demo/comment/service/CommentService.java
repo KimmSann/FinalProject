@@ -18,6 +18,8 @@ public interface CommentService {
 	
 	boolean remove(int commentId);
 	
+	void deleteById(int commentId);
+	
 	
 	default CommentDto entityToDto(Comment comment) {
 		

@@ -37,4 +37,6 @@ public class Admin {
 	 @JoinColumn(name = "userId")
 	 @OneToOne
 	    private User user;
+		
 }
+

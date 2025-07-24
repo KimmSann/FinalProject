@@ -19,6 +19,7 @@ public class PostTest {
 	@Autowired
 	PostRepository repository;
 	
+	
 	@Test
 	void 게시물등록() {
 		PostDto dto = PostDto.builder()
@@ -53,6 +54,7 @@ public class PostTest {
 		service.remove(2);
 
 	}
+	
 	
 	// 좋아요와 조회수는 컨트롤러 만들 때 하기
 	

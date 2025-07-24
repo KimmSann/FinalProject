@@ -26,7 +26,7 @@ public class User  {
 
     private String profileimg;
 
-    private String role = "USER"; // 고정값
+    private String role ;
     
     private String loginType; // "local", "kakao"
     

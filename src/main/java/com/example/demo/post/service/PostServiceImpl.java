@@ -23,6 +23,8 @@ import com.example.demo.util.S3FileUtil;
 
 @Service
 public class PostServiceImpl implements PostService {
+	
+	
 	@Autowired 
 	PostRepository repository;
 
@@ -316,4 +318,11 @@ public class PostServiceImpl implements PostService {
 	public List<PostDto> findAll() {
 		return getList();
 	}
+	
+	 @Override
+	    public void deleteById(int postId) {
+	        if (repository.existsById(postId)) {
+	            repository.deleteById(postId);
+	        }
+	    }
 }

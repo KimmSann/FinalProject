@@ -101,4 +101,34 @@ public class AdminServiceImpl implements AdminService {
                 .managername(dto.getManagername())
                 .build();
     }
+
+    @Override
+    public boolean grantAdmin(int userId) {
+        Optional<User> userOpt = userRepository.findById(userId);
+        if (userOpt.isEmpty()) {
+            System.out.println("유저를 찾을 수 없습니다.");
+            return false;
+        }
+
+        User user = userOpt.get();
+
+        // 1. admin 테이블에 추가
+        Admin admin = Admin.builder()
+            .managername(user.getName())
+            .build();
+
+        repository.save(admin);
+
+        // 2. 사용자 권한을 ROLE_ADMIN으로 변경
+        user.setRole("ROLE_ADMIN");
+        userRepository.save(user);
+
+        System.out.println("관리자 권한 부여 완료");
+        return true;
+    }
+	@Override
+	public void deleteById(int userId) {
+		// TODO Auto-generated method stub
+		
+	}
 }

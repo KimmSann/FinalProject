@@ -1,12 +1,12 @@
 package com.example.demo.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.user.dto.UserDto;
+import com.example.demo.user.repository.UserRepository;
 import com.example.demo.user.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -15,10 +15,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserDetailService implements UserDetailsService {
 	
-	@Autowired
-	private UserService service;
+	// UserService를 통해 사용자 정보를 조회
+	private final UserService service;
 
-//    private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
 	// 필요한 코드
 	// 로그인 성공 => 이메일 주소를 통해 사용자 정보 조회 => 시큐리티 내부에서 사용하는 user데이터 변환
@@ -35,8 +35,5 @@ public class UserDetailService implements UserDetailsService {
 			// 반환된 사용자 정보를 시큐리티가 보관하다가 필요할때 꺼내줌!
 			return new CustomUser(user); 
 		}
-    	
-//        return (UserDetails) userRepository.findByEmail(email)
-//                .orElseThrow(() -> new IllegalArgumentException((email)));
     }
 }

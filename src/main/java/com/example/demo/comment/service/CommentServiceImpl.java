@@ -145,5 +145,11 @@ public class CommentServiceImpl implements CommentService{
 
 	    return dtoList;
 	}
+	@Override
+	public void deleteById(int commentId) {
+		if(repository.existsById(commentId)) {
+			repository.deleteById(commentId);
+		}
+	}
 
 }

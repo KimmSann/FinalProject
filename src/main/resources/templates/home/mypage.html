@@ -124,9 +124,9 @@
     <h5 class="section-title">내가 작성한 게시물</h5>
     <div class="my-list text-start mx-auto" style="max-width: 600px;">
     
-    <!-- 이부분에 반복문 넣기 postDto -->
+    <!-- 클릭 시 프스트 아이디로 이동 -->
       <div class="list-item" th:each=" postdto : ${postDto} ">
-        <a href="#">[[ ${ postdto.title } ]]</a>
+        <a th:href="@{/post/read(no=${postdto.postid})}">[[ ${ postdto.title } ]]</a>
         <div class="list-meta">[[${#temporals.format(postdto.creatdate, 'yyyy-MM-dd HH:mm')}]] · 조회수 [[${postdto.viewcount}]]</div>
       </div>
       
@@ -136,16 +136,14 @@
     <h5 class="section-title">내가 작성한 댓글</h5>
     <div class="my-list text-start mx-auto" style="max-width: 600px;">
     
-    <!-- th:each commentDto -->
 	  <div class="list-item" th:each="comment : ${commentDto}">
-	  <!-- th:href로 나중에 링크 입력하기 -->
-	    <a href="#">[[${comment.content}]]</a>
+	  <!-- postid로 이동 -->
+	    <a th:href="@{/post/read(no=${comment.postid})}">[[${comment.content}]]</a>
 	    <div class="list-meta">
 	      [[${#temporals.format(comment.createdate, 'yyyy-MM-dd')}]]
 	      · 작성한 글 ID: [[${comment.postid}]]
 	    </div>
 	  </div>
-      
     </div>
     
 

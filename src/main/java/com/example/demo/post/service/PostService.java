@@ -39,6 +39,8 @@ public interface PostService {
 	
 	List<PostDto> getTop3Posts();
 	
+	List<PostDto> getManySeePosts();
+	
 	List<PostDto> getListUserEmail(String email);
 	
 	Page<PostDto> searchByKeyword(String keyword, Pageable pageable);

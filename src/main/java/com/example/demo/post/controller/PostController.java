@@ -46,7 +46,7 @@ public class PostController {
 	public String getAiSummary(@RequestParam("postId") int postId) {
 //	    PostDto postDto = postservice.read(postId);
 //	    
-//	    String answer = gptService.callGptApi(postDto.getContent());
+//	    String answer = format(gptService.callGptApi(postDto.getContent()));
 //		
 //		return answer; // 요약 결과 출력
 		// 유현재가 따로 gpt api 결제해서 생성했습니다. 막 사용하지 말아주세요
@@ -218,6 +218,13 @@ public class PostController {
 			return "redirect:/";
 		}
 	}
+
 	
+	// 중바꿈
+    public static String format(String input) {
+        if (input == null || input.isBlank()) return "";
+
+        return input.replaceAll("\\.\\s*", ".<br>").trim();
+    }
 	
 }

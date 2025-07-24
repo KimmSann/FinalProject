@@ -79,7 +79,7 @@
 
     <!-- 본문 -->
     <div class="post-content">
-      [[ ${ postDto.content } ]]
+	<pre th:text="${postDto.content}" style="font-family: 'NanumSquare', sans-serif;  font-size: 1.3rem"></pre>
       <div th:if="${postimgDto != null}">
         <div th:each="img : ${postimgDto}">
           <img th:src="${img.storedFileName}" alt="이미지">
@@ -141,12 +141,12 @@
   document.addEventListener("DOMContentLoaded", () => {
 	    const postId = document.getElementById("post-container").dataset.postId;
 
-	    // 1. AI 요약 가져오기
+	    // AI 요약 가져오기
 	    fetch(`/post/ai-summary?postId=${postId}`)
 	      .then(res => res.text())
 	      .then(summary => {
 	        const summaryDiv = document.querySelector("#ai-summary p");
-	        summaryDiv.textContent = summary;
+	        summaryDiv.innerHTML = summary;	// 자바에서 <br>한거 적용하기 위해 inner로 변경
 	        summaryDiv.classList.remove("text-muted");
 	      })
 	      .catch(err => {
@@ -154,7 +154,7 @@
 	        document.querySelector("#ai-summary p").textContent = "AI 요약을 불러오지 못했습니다.";
 	      });
 
-	    // 2. 댓글도 그 postId로 불러오기
+	    // 댓글을 그 postId로 불러오기
 	    showComment(postId);
 
 	    // 댓글 등록 이벤트도 postId 사용

@@ -91,19 +91,29 @@
       </div>
 
       <!-- Sidebar -->
-      <div class="col-md-4">
-        <div class="sidebar">
-          <h4>인기글</h4>
-          <ul class="list-unstyled">
-            <li th:each="bestdto : ${bestPost}">
-              <a th:href="@{/post/read(no=${bestdto.postid})}" th:text="${bestdto.title}"></a><br>
-              <small th:text="${#temporals.format(bestdto.creatdate, 'yyyy-MM-dd HH:mm')}"></small><br>
-              <small>좋아요 수 : [[ ${bestdto.likecount} ]]</small>
-            </li>
-          </ul>
-        </div>
-      </div>
-
+		<div class="col-md-4">
+		  <div class="sidebar">
+		    <h4>인기글</h4>
+		    <ul class="list-unstyled">
+		      <li th:each="bestdto : ${bestPost}">
+		        <a th:href="@{/post/read(no=${bestdto.postid})}" th:text="${bestdto.title}"></a><br>
+		        <small th:text="${#temporals.format(bestdto.creatdate, 'yyyy-MM-dd HH:mm')}"></small><br>
+		        <small>좋아요 수 : [[ ${bestdto.likecount} ]]</small>
+		      </li>
+		    </ul>
+		  </div>
+		  <div class="sidebar mt-4">
+		    <h4>가장 많이 본 게시물</h4>
+		    <ul class="list-unstyled">
+		      <li th:each="seePost : ${seePost}">
+		        <a th:href="@{/post/read(no=${seePost.postid})}" th:text="${seePost.title}"></a><br>
+		        <small th:text="${#temporals.format(seePost.creatdate, 'yyyy-MM-dd HH:mm')}"></small><br>
+		        <small>조회수 : [[ ${seePost.viewcount} ]]</small>
+		      </li>
+		    </ul>
+		  </div>
+		</div>
+		
     </div>
   </div>
   

@@ -46,6 +46,7 @@ public class HomeController {
 	@GetMapping("/")
 	public String home(Model model, Principal principal) {
 		List<PostDto> bestPost = postService.getTop3Posts();
+		List<PostDto> seePost = postService.getManySeePosts();
 	    List<BoardDto> boardlist = boardService.getList();
 	    Map<Integer, List<PostDto>> boardPostMap = new HashMap<>();
 	    
@@ -59,6 +60,7 @@ public class HomeController {
 	    }
 	    // 위와 비슷하게 좋아요순으로 정렬한 값 추출하기
 	    
+	    model.addAttribute("seePost",seePost);
 	    model.addAttribute("bestPost", bestPost);
 	    model.addAttribute("boardlist", boardlist);
 	    model.addAttribute("boardPostMap", boardPostMap);
@@ -69,6 +71,7 @@ public class HomeController {
 	public void mypage(Model model, Principal principal) {
 		String email = principal.getName();
 		
+		// 아래에 나온 게시물 및 댓글 클릭 시 그 게시물로 이동
 		// 출력 5개로 제한
 		UserDto userDto = userService.readByEmail(email);
 	    List<PostDto> postDto = postService.getListUserEmail(email)
@@ -106,6 +109,7 @@ public class HomeController {
 		String filename = null;
 		UserDto userDto = userService.readByEmail(principal.getName());
 		
+		// 파일이 없으면 넘기기 있으면 s3 사용해서 저장하기
 		if(files != null && !files.isEmpty()) {
 			// 파일을 s3에 저장해둠
 			filename = fileUtil.fileUpload(files);			

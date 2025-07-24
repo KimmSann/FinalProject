@@ -283,12 +283,7 @@ public class PostServiceImpl implements PostService {
 	
 	
 	// 인기글 3개 가져옴
-	@Override
-	public List<PostDto> getTop3Posts() {
-	    List<Post> posts = repository.findTop3PostsNative();
-	    return posts.stream().map(this::entityToDto).toList();
-	}
-	
+
 	@Override
 	public Page<PostDto> category(int boardId, Pageable pageable) {
 		
@@ -328,5 +323,19 @@ public class PostServiceImpl implements PostService {
 	    
 	    return postdto;
 	    
+	}
+	
+	@Override
+	public List<PostDto> getTop3Posts() {
+	    List<Post> posts = repository.findTop3PostsNative();
+	    return posts.stream().map(this::entityToDto).toList();
+	}
+	
+
+
+	@Override
+	public List<PostDto> getManySeePosts() {
+		List<Post> posts = repository.findTop3PostsSee();
+		return posts.stream().map(this::entityToDto).toList();
 	}
 }

@@ -25,4 +25,7 @@ public interface PostRepository extends JpaRepository<Post, Integer>{
 	
 	@Query("SELECT p FROM Post p WHERE p.title LIKE %:keyword% OR p.content LIKE %:keyword%")
 	Page<Post> searchByKeyword(@Param("keyword") String keyword, Pageable pageable);
+	
+	@Query(value = "SELECT * FROM tbl_post ORDER BY viewcount DESC LIMIT 3", nativeQuery = true)
+	List<Post> findTop3PostsSee();
 }

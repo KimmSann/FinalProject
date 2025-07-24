@@ -148,4 +148,11 @@ public class UserServiceImpl implements UserService {
     public boolean signup(SignupDto dto) {
         return false;
     }
+    @Override
+    public void deleteById(int userId) {
+    	if(userRepository.existsById(userId)) {
+    		userRepository.deleteById(userId);
+    	}
+    }
+    
 }

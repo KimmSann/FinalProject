@@ -101,4 +101,16 @@ public class AdminServiceImpl implements AdminService {
                 .managername(dto.getManagername())
                 .build();
     }
+
+	@Override
+	public boolean grantAdmin(int userId) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void deleteById(int userId) {
+		// TODO Auto-generated method stub
+		
+	}
 }

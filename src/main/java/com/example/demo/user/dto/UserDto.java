@@ -30,6 +30,8 @@ public class UserDto {
 	
 	String loginType;
 	
+	private boolean banned;
+	
 	LocalDateTime createdate;
 	
 	

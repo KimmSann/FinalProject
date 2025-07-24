@@ -71,4 +71,3 @@ options.getGeneratedSourceOutputDirectory().set(file(querydslDir))
 clean.doLast {
 file(querydslDir).deleteDir()
 }
-

@@ -3,6 +3,9 @@ package com.example.demo.service;
 
 import com.example.demo.user.entity.User;
 import com.example.demo.user.repository.UserRepository;
+
+import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,7 +21,7 @@ public class UserTest {
     private PasswordEncoder passwordEncoder;
 
     @Test
-    public void saveTestUserWithEncodedPassword() {
+    public void 유() {
         String rawPassword = "1234";
         String encodedPassword = passwordEncoder.encode(rawPassword); 
 
@@ -28,7 +31,9 @@ public class UserTest {
                 .password(encodedPassword)
                 .nickname("길동이")
                 .profileimg("default.png")
-                .role("USER")
+                .role("ROLE_USER")
+                .loginType("local")
+                
                 .build();
 
         userRepository.save(user);

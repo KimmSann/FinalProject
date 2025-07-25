@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.admin.dto.AdminDto;
 import com.example.demo.admin.entity.Admin;
@@ -27,6 +28,9 @@ public class AdminServiceImpl implements AdminService {
 
     @Autowired
     CommentRepository commentRepository;
+    
+    @Autowired
+    private AdminRepository adminRepository;
 
     @Override
     public boolean register(AdminDto dto) {
@@ -114,9 +118,9 @@ public class AdminServiceImpl implements AdminService {
 
         // 1. admin 테이블에 추가
         Admin admin = Admin.builder()
-            .managername(user.getName())
-            .build();
-
+                .managername(user.getName())
+                .user(user) 
+                .build();
         repository.save(admin);
 
         // 2. 사용자 권한을 ROLE_ADMIN으로 변경
@@ -126,9 +130,9 @@ public class AdminServiceImpl implements AdminService {
         System.out.println("관리자 권한 부여 완료");
         return true;
     }
-	@Override
-	public void deleteById(int userId) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void deleteById(int userId) {
+    	adminRepository.deleteByUserUserid(userId);
+    }
+   
 }

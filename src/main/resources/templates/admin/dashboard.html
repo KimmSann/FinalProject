@@ -1,9 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="UTF-8">
     <title>관리자 대시보드</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
+        body { padding-top: 70px; }  
         table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
         th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
         th { background-color: #f5f5f5; }
@@ -12,65 +16,105 @@
 </head>
 <body>
 
-    <h1>관리자 대시보드</h1>
+    <!--  Navbar  -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">With Game</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="/board/category?boardId=1">게임 평가</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/board/category?boardId=2">자유게시판</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">공지사항</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/board/category?boardId=3">QnA</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/home/mypage">마이페이지</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/logout">로그아웃</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-    <!-- ✅ 유저 목록 -->
-    <h2>유저 목록</h2>
-    <table>
-        <tr>
-            <th>ID</th><th>이메일</th><th>닉네임</th><th>권한</th><th>액션</th>
-        </tr>
-        <tr th:each="user : ${users}">
-            <td th:text="${user.userid}"></td>
-            <td th:text="${user.email}"></td>
-            <td th:text="${user.nickname}"></td>
-            <td th:text="${user.role}"></td>
-            <td>
-                <form th:action="@{|/admin/grant-admin/${user.userid}|}" method="post" style="display:inline;">
-                    <button type="submit">관리자 권한 부여</button>
-                </form>
-                <form th:action="@{|/admin/delete-user/${user.userid}|}" method="post" style="display:inline;">
-                    <button type="submit">유저 삭제</button>
-                </form>
-            </td>
-        </tr>
-    </table>
+    <div class="container mt-4">
+        <h1 class="mb-4">관리자 대시보드</h1>
 
-    <!-- ✅ 게시물 목록 -->
-    <h2>게시물 목록</h2>
-    <table>
-        <tr>
-            <th>ID</th><th>제목</th><th>작성자</th><th>액션</th>
-        </tr>
-        <tr th:each="post : ${posts}">
-            <td th:text="${post.id}"></td>
-            <td th:text="${post.title}"></td>
-            <td th:text="${post.writer}"></td>
-            <td>
-                <form th:action="@{|/admin/delete-post/${post.id}|}" method="post">
-                    <button type="submit">게시물 삭제</button>
-                </form>
-            </td>
-        </tr>
-    </table>
+        <!-- 유저 목록 -->
+        <h2>유저 목록</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th><th>이메일</th><th>닉네임</th><th>권한</th><th>액션</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.userid}"></td>
+                    <td th:text="${user.email}"></td>
+                    <td th:text="${user.nickname}"></td>
+                    <td th:text="${user.role == 'ROLE_ADMIN' ? '관리자' : user.role == 'ROLE_USER' ? '유저' : '기타'}"></td>
+                    <td>
+                        <form th:action="@{|/admin/grant-admin/${user.userid}|}" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-success">관리자 권한 부여</button>
+                        </form>
+                        <form th:action="@{|/admin/delete-user/${user.userid}|}" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-danger">유저 삭제</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
-    <!-- ✅ 댓글 목록 -->
-    <h2>댓글 목록</h2>
-    <table>
-        <tr>
-            <th>ID</th><th>내용</th><th>작성자</th><th>액션</th>
-        </tr>
-        <tr th:each="comment : ${comments}">
-            <td th:text="${comment.commentId}"></td>
-            <td th:text="${comment.content}"></td>
-            <td th:text="${comment.writer}"></td>
-            <td>
-                <form th:action="@{|/admin/delete-comment/${comment.commentId}|}" method="post">
-                    <button type="submit">댓글 삭제</button>
-                </form>
-            </td>
-        </tr>
-    </table>
+        <!-- 게시물 목록 -->
+        <h2>게시물 목록</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th><th>제목</th><th>작성자</th><th>액션</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="post : ${posts}">
+                    <td th:text="${post.id}"></td>
+                    <td th:text="${post.title}"></td>
+                    <td th:text="${post.writer}"></td>
+                    <td>
+                        <form th:action="@{|/admin/delete-post/${post.id}|}" method="post">
+                            <button type="submit" class="btn btn-sm btn-danger">게시물 삭제</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- 댓글 목록 -->
+        <h2>댓글 목록</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th><th>내용</th><th>작성자</th><th>액션</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="comment : ${comments}">
+                    <td th:text="${comment.commentId}"></td>
+                    <td th:text="${comment.content}"></td>
+                    <td th:text="${comment.writer}"></td>
+                    <td>
+                        <form th:action="@{|/admin/delete-comment/${comment.commentId}|}" method="post">
+                            <button type="submit" class="btn btn-sm btn-danger">댓글 삭제</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+     <!-- Footer -->
+  <footer class="text-center mt-5 mb-3">
+    <small>&copy; 2025 With Game. All rights reserved.</small>
+  </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

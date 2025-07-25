@@ -19,6 +19,8 @@ public interface UserService {
     
     boolean modify(UserDto dto);
     
+    
+    
     void deleteById(int userId);
     
     

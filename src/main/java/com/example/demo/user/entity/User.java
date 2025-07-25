@@ -30,7 +30,6 @@ public class User  {
     
     private String loginType; // "local", "kakao"
     
-    private boolean isBanned = false; // 밴 여부
 
     private LocalDateTime createdate;
     

@@ -50,6 +50,8 @@ dependencies {
 	testCompileOnly 'org.projectlombok:lombok:1.18.30'
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
 
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
 	
 	implementation 'org.json:json:20240303'
 	
@@ -64,15 +66,18 @@ tasks.named('test') {
 def querydslDir = "src/main/generated"
 
 sourceSets {
-main.java.srcDirs += [ querydslDir ]
+    main.java.srcDirs += [ querydslDir ]
 }
+
 tasks.withType(JavaCompile) {
-options.getGeneratedSourceOutputDirectory().set(file(querydslDir))
+    options.getGeneratedSourceOutputDirectory().set(file(querydslDir))
+    options.compilerArgs << "-parameters"
 }
+
 clean.doLast {
-file(querydslDir).deleteDir()
+    file(querydslDir).deleteDir()
 }
 
 test {
-	exclude '**/*'
+    exclude '**/*'
 }

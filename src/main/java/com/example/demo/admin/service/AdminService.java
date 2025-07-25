@@ -5,7 +5,11 @@ import com.example.demo.admin.entity.Admin;
 
 public interface AdminService {
 	
+	boolean grantAdmin(int userId); 
+	
 	boolean register(AdminDto dto);
+	
+	void deleteById(int userId);
 	
 	AdminDto read(int id);
 	

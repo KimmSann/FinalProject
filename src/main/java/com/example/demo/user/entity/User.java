@@ -26,14 +26,17 @@ public class User  {
 
     private String profileimg;
 
-    private String role;
+    private String role ;
+    
+    private String loginType; // "local", "kakao"
+    
 
     private LocalDateTime createdate;
-
+    
     @PrePersist
     public void prePersist() {
         this.createdate = LocalDateTime.now();
-        this.role = this.role == null ? "USER" : this.role;
-        this.profileimg = this.profileimg == null ? "default.png" : this.profileimg;
     }
+   
+  
 }

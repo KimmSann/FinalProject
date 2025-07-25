@@ -15,6 +15,8 @@ public interface PostService {
 	
 	// 기본 CRUD
 	
+	void deleteById(int postId); // 게시물 삭제
+	
 	int register(PostDto dto);
 	
 	PostDto read(int postId);
@@ -93,5 +95,9 @@ public interface PostService {
 		
 		return post;
 	}
+	
+	List<PostDto> findAll();
+
+	
 	
 }

@@ -53,23 +53,49 @@ public class PostController {
 		return "gpt 비용 절약을 위한 일시적으로 잠금";
 	}
 	
-	@GetMapping("/read")
-	public void read(@RequestParam(name = "no") int postid, Model model) {
-		
-		// 일단 클릭하면 조회수 증가
-		postservice.viewcount(postid);
-		// postid로 유저 아이디 찾기
-		PostDto postDto = postservice.read(postid);
-		int userId = postDto.getUserid();
-		
-		UserDto userDto = userservice.read(userId);
-		List<PostimgDto> postimgDto = postimgService.getPostImages(postid);		
-		
-		model.addAttribute("postDto", postDto);
-		model.addAttribute("userDto", userDto);
-		model.addAttribute("postimgDto", postimgDto);
-	}
+//
+//	@GetMapping("/read")
+//	public void read(@RequestParam(name = "no") int postid, Model model) {
+//		
+//		// 일단 클릭하면 조회수 증가
+//		postservice.viewcount(postid);
+//		// postid로 유저 아이디 찾기
+//		PostDto postDto = postservice.read(postid);
+//		int userId = postDto.getUserid();
+//		
+//		UserDto userDto = userservice.read(userId);
+//		List<PostimgDto> postimgDto = postimgService.getPostImages(postid);		
+//		
+//		model.addAttribute("postDto", postDto);
+//		model.addAttribute("userDto", userDto);
+//		model.addAttribute("postimgDto", postimgDto);
+//	}
 	
+
+	  @GetMapping("/read")
+	    public String read(@RequestParam(name = "no") int postid, Model model) {
+
+	        postservice.viewcount(postid);
+	        PostDto postDto = postservice.read(postid);
+	        int userId = postDto.getUserid();
+
+	        try {
+	            UserDto userDto = userservice.read(userId);
+	            if (userDto == null) {
+	                return "error/403";  // 작성자 정보 없음
+	            }
+
+	            List<PostimgDto> postimgDto = postimgService.getPostImages(postid);
+	            model.addAttribute("postDto", postDto);
+	            model.addAttribute("userDto", userDto);
+	            model.addAttribute("postimgDto", postimgDto);
+
+	            return "post/read";
+	        } catch (Exception e) {
+	            return "error/403";  // 예외 발생 시
+	        }
+	    }
+
 	@GetMapping("/register")
 	public void register() {
 		

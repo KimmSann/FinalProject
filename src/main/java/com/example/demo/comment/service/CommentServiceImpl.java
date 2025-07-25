@@ -96,5 +96,52 @@ public class CommentServiceImpl implements CommentService{
 		
 	}
 
+	
+//	나중에 이름 가져와서 지우기
+//	@Override
+//	public boolean remove(int commentId, String loginNickname) {
+//	    Optional<Comment> commentOpt = repository.findById(commentId);
+//
+//	    if (commentOpt.isEmpty()) {
+//	        return false;
+//	    }
+//
+//	    Comment comment = commentOpt.get();
+//
+//	    // 댓글 작성자 닉네임을 가져오기 위해 User 엔티티에서 꺼냄
+//	    String writerNickname = comment.getUser().getNickname();
+//
+//	    // 닉네임이 일치하지 않으면 삭제 금지
+//	    if (!writerNickname.equals(loginNickname)) {
+//	        return false;
+//	    }
+//
+//	    repository.deleteById(commentId);
+//	    return true;
+//	}
+//
+	@Override
+	public List<CommentDto> findAll() {
+	    List<Comment> entityList = repository.findAll();  
+
+	    List<CommentDto> dtoList = entityList.stream()
+	        .map(entity -> {
+	            CommentDto dto = entityToDto(entity);
+	            int userId = dto.getUserid();
+	            UserDto userDto = userService.read(userId);
+	            dto.setNickname(userDto.getNickname());
+	            return dto;
+	        })
+	        .collect(Collectors.toList());
+
+	    return dtoList;
+	}
+	@Override
+	public void deleteById(int commentId) {
+		if(repository.existsById(commentId)) {
+			repository.deleteById(commentId);
+		}
+	}
+
 
 }

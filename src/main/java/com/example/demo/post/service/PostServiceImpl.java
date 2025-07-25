@@ -32,6 +32,7 @@ public class PostServiceImpl implements PostService {
 
 	@Autowired
 	UserRepository userRepository;
+
 	
 	@Autowired 
 	PostRepository repository;
@@ -324,6 +325,7 @@ public class PostServiceImpl implements PostService {
 	    return postdto;
 	    
 	}
+
 	
 	@Override
 	public List<PostDto> getTop3Posts() {
@@ -338,4 +340,17 @@ public class PostServiceImpl implements PostService {
 		List<Post> posts = repository.findTop3PostsSee();
 		return posts.stream().map(this::entityToDto).toList();
 	}
+
+
+	@Override
+	public List<PostDto> findAll() {
+		return getList();
+	}
+	
+	 @Override
+	    public void deleteById(int postId) {
+	        if (repository.existsById(postId)) {
+	            repository.deleteById(postId);
+	        }
+	    }
 }

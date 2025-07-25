@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.example.demo.comment.dto.CommentDto;
 import com.example.demo.comment.entity.Comment;
+import com.example.demo.post.dto.PostDto;
 import com.example.demo.post.entity.Post;
 import com.example.demo.user.entity.User;
 
@@ -16,6 +17,8 @@ public interface CommentService {
 	List<CommentDto> getListByEmail(String nickname);
 	
 	boolean remove(int commentId, String email);
+	
+	void deleteById(int commentId);
 	
 	
 	default CommentDto entityToDto(Comment comment) {
@@ -54,5 +57,7 @@ public interface CommentService {
 		
 		return comment;
 	}
+	List<CommentDto> findAll();
+
 	
 }

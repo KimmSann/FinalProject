@@ -81,19 +81,25 @@ public class CommentServiceImpl implements CommentService{
 
 	@Override
 	public boolean remove(int commentId, String email) {
-		Optional<Comment> optional = repository.findById(commentId);
-		
-		if(optional.isEmpty()) {
-			return false;
-		}
-		Comment comment = optional.get();
-		String writeEmail = comment.getUser().getEmail();
-		if(!writeEmail.equals(email)) {
-			return false;
-		}
-		repository.deleteById(commentId);
-		return true;
-		
+	    Optional<Comment> optional = repository.findById(commentId);
+	    
+	    if (optional.isEmpty()) {
+	        return false;
+	    }
+
+	    Comment comment = optional.get();
+	    String writeEmail = comment.getUser().getEmail();
+
+	    UserDto userDto = userService.readByEmail(email);
+	    String role = userDto.getRole();
+
+	    // 본인이 작성했거나 관리자이면 삭제 가능
+	    if (writeEmail.equals(email) || "ROLE_ADMIN".equals(role)) {
+	        repository.deleteById(commentId);
+	        return true;
+	    }
+
+	    return false;
 	}
 
 	

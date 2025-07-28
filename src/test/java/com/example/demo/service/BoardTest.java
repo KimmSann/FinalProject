@@ -21,18 +21,26 @@ public class BoardTest {
 		
 		// 보드는 qna 자유게시판 등 약 4가지 보드를 수정하지않고 고정할거기 떄문에 테스트할 떄 고정으로 생성
 		
+
 		BoardDto dto = BoardDto.builder()
 				.boardname("Q&A")
 				.description("질의응답을 해야해요")
 				.build();
 
+//		BoardDto dto = BoardDto.builder()
+//				.boardname("Q&A")
+//				.description("질의응답을 해야해요")
+//				.adminid(3)   // 관리자가 없으니 에러남
+//				.build();
+
+
 		
 //		BoardDto dto = BoardDto.builder()
 //				.boardname("자유게시판")
 //				.description("자유롭게 대화하세요")
-//				.adminid(1)
+//				.adminid(3)
 //				.build();
-		
+//		
 		
 
 //		BoardDto dto = BoardDto.builder()

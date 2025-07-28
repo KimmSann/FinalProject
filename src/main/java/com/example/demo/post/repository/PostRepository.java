@@ -28,4 +28,6 @@ public interface PostRepository extends JpaRepository<Post, Integer>{
 	
 	@Query(value = "SELECT * FROM tbl_post ORDER BY viewcount DESC LIMIT 3", nativeQuery = true)
 	List<Post> findTop3PostsSee();
+	
+	
 }

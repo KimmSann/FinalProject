@@ -13,6 +13,8 @@ public interface AdminService {
 	
 	AdminDto read(int id);
 	
+	boolean forceDeleteUser(int userId);
+	
 	default AdminDto entityToDto(Admin admin) {
 		
 		AdminDto dto = AdminDto.builder()

@@ -23,8 +23,8 @@ public class CommentTest {
 	void 댓글달리나_테스트() {
 		CommentDto dto = CommentDto.builder()
 				.content("안녕하세요....")
-				.userid(2)
-				.postid(1)
+				.userid(5)
+				.postid(2)
 				.build();
 		
 		int no = service.register(dto);

@@ -31,6 +31,11 @@ public interface PostService {
 	
 	boolean remove(int postId, String email);
 	
+	boolean removeAsAdmin(int postId);
+
+	
+	
+	
 	// 조회수 싫어요, 좋아요 수 관리
 	
 	int viewcount(int postId);
@@ -52,6 +57,9 @@ public interface PostService {
 		
 		int boardId = post.getBoardid().getBoardid();
 		int userId = post.getUserid().getUserid();
+		 String nickname = (post.getUserid() != null && post.getUserid().getNickname() != null)
+		            ? post.getUserid().getNickname()
+		            : "알 수 없음";
 		
 		PostDto dto = PostDto.builder()
 				.postid(post.getPostid())
@@ -64,6 +72,7 @@ public interface PostService {
 				.updatdate(post.getUpdatdate())
 				.boardid(boardId)
 				.userid(userId)
+				.nickname(nickname)
 				.build();
 		
 		return dto;
@@ -95,6 +104,7 @@ public interface PostService {
 		
 		return post;
 	}
+	
 	
 	List<PostDto> findAll();
 

@@ -12,7 +12,7 @@
 	  </style>
 	</head>
 	<body>
-  <!-- Navbar -->
+   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
     <div class="container">
       <a class="navbar-brand" href="/">With Game</a>
@@ -25,6 +25,9 @@
 		  <li class="nav-item"><a class="nav-link" href="/board/category?boardId=1">게임 평가</a></li>
 		  <li class="nav-item"><a class="nav-link" href="/board/category?boardId=2">자유게시판</a></li>
 		  <li class="nav-item"><a class="nav-link" href="/board/category?boardId=3">QnA</a></li>
+		  
+		  <!-- 관리자일 경우에만 노출 -->
+    	  <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')"><a class="nav-link" href="/admin/dashboard">유저 관리</a></li>
 		
 		  <!-- 로그인하지 않은 사용자만 -->
 		  <li class="nav-item" sec:authorize="!isAuthenticated()">
@@ -43,12 +46,11 @@
 		  </li>
 		</ul>
 
-        
+     
 
       </div>
     </div>
   </nav>
-  
 
 
 

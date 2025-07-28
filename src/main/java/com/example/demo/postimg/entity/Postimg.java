@@ -26,7 +26,7 @@ public class Postimg {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	int fileid;
 	
-	@Column(length = 100)
+	@Column(columnDefinition = "TEXT")
 	String storedFileName;
 	
 	@ManyToOne

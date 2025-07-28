@@ -353,4 +353,36 @@ public class PostServiceImpl implements PostService {
 	            repository.deleteById(postId);
 	        }
 	    }
+
+
+	 @Override
+	 @Transactional
+	 public boolean removeAsAdmin(int postId) {
+	     try {
+	         Optional<Post> result = repository.findById(postId);
+	         if (result.isEmpty()) return false;
+
+	         Post post = result.get();
+
+	         // Post 엔티티를 postId로 생성 
+	         Post entity = Post.builder().postid(postId).build();
+
+	         // 1. 댓글 삭제
+	         commentRepository.deleteByPost(post);
+
+	         // 2. 이미지 삭제
+	         postimgRepository.deleteByPostid(entity);
+
+	         // 3. 좋아요 삭제
+	         postLikeRepository.deleteByPost(post);
+
+	         // 4. 게시글 삭제
+	         repository.delete(post);
+
+	         return true;
+	     } catch (Exception e) {
+	         System.out.println("ERROR in removeAsAdmin: " + e.getMessage());
+	         return false;
+	     }
+	 }
 }

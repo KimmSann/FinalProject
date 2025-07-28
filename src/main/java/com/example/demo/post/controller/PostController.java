@@ -4,6 +4,8 @@ import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -162,22 +164,26 @@ public class PostController {
 
 	
 	@GetMapping("/modify")
-	public String modify(@RequestParam(name = "postId") int postId, Model model, Principal principal, RedirectAttributes redirectAttributes) {
+	public String modify(@RequestParam(name = "postId") int postId, Model model,
+	                     Principal principal, RedirectAttributes redirectAttributes,
+	                     Authentication authentication) {
 	    PostDto postDto = postservice.read(postId);
-
 	    UserDto writerDto = userservice.read(postDto.getUserid());
 
 	    String loginUserEmail = principal.getName();
 
-	    if (loginUserEmail.equals(writerDto.getEmail())) {
+	    boolean isAdmin = authentication.getAuthorities().stream()
+	                        .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+
+	    if (loginUserEmail.equals(writerDto.getEmail()) || isAdmin) {
 	        postDto.setNickname(writerDto.getNickname());
 	        List<PostimgDto> postimgDto = postimgService.getPostImages(postId);
 	        model.addAttribute("postDto", postDto);
 	        model.addAttribute("postimgDto", postimgDto);
 	        return "post/modify";
 	    } else {
-	    	redirectAttributes.addFlashAttribute("message", "접근할 수 없습니다.");
-	    	return "redirect:/";
+	        redirectAttributes.addFlashAttribute("message", "접근할 수 없습니다.");
+	        return "redirect:/";
 	    }
 	}
 	
@@ -211,18 +217,31 @@ public class PostController {
 
 	@PostMapping("/remove")
 	public String remove(@RequestParam("postId") int postId,
-			RedirectAttributes redirectAttributes,
-			Principal principal) {	
-		
-	    boolean removeState = postservice.remove(postId, principal.getName());
-	    if(removeState) {
-	    	redirectAttributes.addFlashAttribute("message", "게시글이 삭제되었습니다.");
-	    	return "redirect:/";	    	
+	                     RedirectAttributes redirectAttributes,
+	                     Principal principal,
+	                     Authentication authentication) {
+
+	    // 관리자 여부 확인
+	    boolean isAdmin = authentication.getAuthorities().stream()
+	                        .map(GrantedAuthority::getAuthority)
+	                        .anyMatch(role -> role.equals("ROLE_ADMIN"));
+
+	    boolean removeState;
+
+	    if (isAdmin) {
+	        // 관리자는 작성자 이메일 체크 없이 삭제
+	        removeState = postservice.removeAsAdmin(postId); 
+	    } else {
+	        // 일반 사용자는 본인 게시물만 삭제 가능
+	        removeState = postservice.remove(postId, principal.getName());
 	    }
-	    else {
-	    	redirectAttributes.addFlashAttribute("message", "삭제가 불가능합니다.");
-			return "redirect:/";
-		}
+
+	    if (removeState) {
+	        redirectAttributes.addFlashAttribute("message", "게시글이 삭제되었습니다.");
+	    } else {
+	        redirectAttributes.addFlashAttribute("message", "삭제가 불가능합니다.");
+	    }
+	    return "redirect:/";
 	}
 
 	

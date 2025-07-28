@@ -31,6 +31,11 @@ public interface PostService {
 	
 	boolean remove(int postId, String email);
 	
+	boolean removeAsAdmin(int postId);
+
+	
+	
+	
 	// 조회수 싫어요, 좋아요 수 관리
 	
 	int viewcount(int postId);

@@ -24,7 +24,6 @@ public class BoardTest {
 		BoardDto dto = BoardDto.builder()
 				.boardname("Q&A")
 				.description("질의응답을 해야해요")
-				.adminid(3)   // 관리자가 없으니 에러남
 				.build();
 
 		

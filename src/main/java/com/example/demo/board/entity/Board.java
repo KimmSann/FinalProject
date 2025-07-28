@@ -32,10 +32,7 @@ public class Board {
 	
 	@Column(length = 100)
 	String description;
-	
-	@ManyToOne
-	@JoinColumn(name = "adminid")
-	Admin adminid;
+
 	
 	
 }

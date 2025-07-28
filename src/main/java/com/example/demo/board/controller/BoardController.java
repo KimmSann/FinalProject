@@ -7,13 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -57,5 +54,32 @@ public class BoardController {
 		return "board/category";
 	}
 	
+	@PostMapping("/register")
+	public String register() {
+		
+	    BoardDto dto1 = BoardDto.builder()
+	            .boardname("게임 평가")
+	            .description("유저들과 게임을 평가합니다.")
+	            .build();
+
+	    BoardDto dto2 = BoardDto.builder()
+	            .boardname("자유게시판")
+	            .description("자유롭게 대화하세요")
+	            .build();
+
+	    BoardDto dto3 = BoardDto.builder()
+	            .boardname("Q&A")
+	            .description("궁금한 것을 질문해 보세요.")
+	            .build();
+
+	    int no1 = boardService.register(dto1);
+	    int no2 = boardService.register(dto2);
+	    int no3 = boardService.register(dto3);
+
+	    System.out.println("등록된 게시판 번호: " + no1 + ", " + no2 + ", " + no3);
+	    
+	    return "redirect:/";
+	}
+
 
 }

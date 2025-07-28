@@ -15,7 +15,6 @@ public class BoardDto {
 	String boardname;
 	
 	String description;
-	
-	int adminid;
+
 	
 }

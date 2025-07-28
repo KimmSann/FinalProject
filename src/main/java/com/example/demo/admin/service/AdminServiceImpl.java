@@ -11,6 +11,7 @@ import com.example.demo.admin.entity.Admin;
 import com.example.demo.admin.repository.AdminRepository;
 import com.example.demo.comment.repository.CommentRepository;
 import com.example.demo.post.repository.PostRepository;
+import com.example.demo.postLike.repository.PostLikeRepository;
 import com.example.demo.user.entity.User;
 import com.example.demo.user.repository.UserRepository;
 
@@ -31,6 +32,9 @@ public class AdminServiceImpl implements AdminService {
     
     @Autowired
     private AdminRepository adminRepository;
+    
+    @Autowired
+    private PostLikeRepository postLikeRepository;
 
     @Override
     public boolean register(AdminDto dto) {
@@ -62,28 +66,45 @@ public class AdminServiceImpl implements AdminService {
         userRepository.save(user);
         return true;
     }
-
-    // 유저 강제 탈퇴
+    @Override
+    @Transactional
     public boolean forceDeleteUser(int userId) {
         if (!userRepository.existsById(userId)) {
             System.out.println("유저를 찾을 수 없습니다.");
             return false;
         }
+
+        // 관리자 테이블에서 먼저 삭제
+        adminRepository.deleteByUserUserid(userId);
+
+        // 그 다음 유저 삭제
         userRepository.deleteById(userId);
+
         return true;
     }
 
     // 게시글 삭제
+    @Transactional
     public boolean deletePost(int postId) {
         if (!postRepository.existsById(postId)) {
             System.out.println("게시글을 찾을 수 없습니다.");
             return false;
         }
+
+        // 1. 좋아요 먼저 삭제
+        postLikeRepository.deleteByPostPostid(postId);
+
+        //  댓글 먼저 삭제 
+        commentRepository.deleteByPostPostid(postId); 
+
+        //  게시글 삭제
         postRepository.deleteById(postId);
         return true;
     }
 
+
     // 댓글 삭제
+    
     public boolean deleteComment(int commentId) {
         if (!commentRepository.existsById(commentId)) {
             System.out.println("댓글을 찾을 수 없습니다.");

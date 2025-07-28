@@ -34,7 +34,7 @@ public class Admin {
 	@Column(length = 100)
 	String managername;
 	
-	 @JoinColumn(name = "userId")
+	 @JoinColumn(name = "user_id")
 	 @OneToOne
 	    private User user;
 		

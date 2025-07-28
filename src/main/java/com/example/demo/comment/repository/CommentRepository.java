@@ -3,6 +3,8 @@ package com.example.demo.comment.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.comment.entity.Comment;
 import com.example.demo.post.entity.Post;
@@ -16,5 +18,9 @@ public interface CommentRepository extends JpaRepository<Comment, Integer>{
 	List<Comment> findByUser(User user);
 	
 	void deleteByPost(Post post);
+
+	  @Transactional
+	    @Modifying
+	    void deleteByPostPostid(int postId);
 	
 }

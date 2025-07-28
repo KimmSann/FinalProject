@@ -19,7 +19,9 @@ public class LoginController {
 
     // 로그인 폼
     @GetMapping("/signin")
-    public String showSigninForm() {
+    public String showSigninForm(HttpSession session) {
+    	
+    	session.invalidate();	
     	
         return "signin";
     }

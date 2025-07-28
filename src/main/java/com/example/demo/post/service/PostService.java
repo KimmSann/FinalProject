@@ -52,6 +52,9 @@ public interface PostService {
 		
 		int boardId = post.getBoardid().getBoardid();
 		int userId = post.getUserid().getUserid();
+		 String nickname = (post.getUserid() != null && post.getUserid().getNickname() != null)
+		            ? post.getUserid().getNickname()
+		            : "알 수 없음";
 		
 		PostDto dto = PostDto.builder()
 				.postid(post.getPostid())
@@ -64,6 +67,7 @@ public interface PostService {
 				.updatdate(post.getUpdatdate())
 				.boardid(boardId)
 				.userid(userId)
+				.nickname(nickname)
 				.build();
 		
 		return dto;
@@ -95,6 +99,7 @@ public interface PostService {
 		
 		return post;
 	}
+	
 	
 	List<PostDto> findAll();
 

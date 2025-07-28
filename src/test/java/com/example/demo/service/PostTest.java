@@ -23,10 +23,10 @@ public class PostTest {
 	@Test
 	void 게시물등록() {
 		PostDto dto = PostDto.builder()
-				.title("진짜 큐엔에이")
+				.title("자유로워")
 				.content("ㅎㅇㅎㅇ 아니? 안 ㅎㅇㅎㅇ")
-				.boardid(1)
-				.userid(1)
+				.boardid(2)
+				.userid(4)
 				.build();
 		
 		

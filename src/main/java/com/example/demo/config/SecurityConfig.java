@@ -34,7 +34,7 @@ public class SecurityConfig {
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/", "/signin","/signup", "/register", "/css/**", "/js/**", "/images/**").permitAll()
-            .requestMatchers("/admin/**").hasRole("ADMIN") // 관리자 전용 페이지
+//            .requestMatchers("/admin/**").hasRole("ADMIN") // 관리자 전용 페이지 (확인용 주석처리)
             .requestMatchers("/my/**").hasAnyRole("ADMIN", "USER")
             .requestMatchers("/post/**").hasAnyRole("ADMIN", "USER") // 게시물 삭제는 관리자와 작성자만
             .requestMatchers("/comment/**").hasAnyRole("ADMIN", "USER") // 댓글도 마찬가지

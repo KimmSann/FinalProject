@@ -35,7 +35,6 @@ public class SecurityConfig {
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/", "/signin","/signup", "/register", "/css/**", "/js/**", "/images/**").permitAll()
             .requestMatchers("/admin").hasRole("ADMIN") // 관리자 전용 페이지
-            .requestMatchers("/board/**").hasAnyRole("ADMIN", "USER")
             .requestMatchers("/my/**").hasAnyRole("ADMIN", "USER")
             .requestMatchers("/post/remove/**").hasAnyRole("ADMIN", "USER") // 게시물 삭제는 관리자와 작성자만
             .requestMatchers("/comment/delete/**").hasAnyRole("ADMIN", "USER") // 댓글도 마찬가지

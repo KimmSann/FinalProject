@@ -38,38 +38,18 @@ public class PostController {
 	@Autowired
 	PostimgService postimgService;
 	
-//	@Autowired
-//	private GptService gptService;
+	@Autowired
+	private GptService gptService;
 
 	@GetMapping("/ai-summary")
 	@ResponseBody
 	public String getAiSummary(@RequestParam("postId") int postId) {
-//	    PostDto postDto = postservice.read(postId);
-//	    
-//	    String answer = format(gptService.callGptApi(postDto.getContent()));
-//		
-//		return answer; // 요약 결과 출력
-		// 유현재가 따로 gpt api 결제해서 생성했습니다. 막 사용하지 말아주세요
-		return "gpt 비용 절약을 위한 일시적으로 잠금";
+	    PostDto postDto = postservice.read(postId);
+	    
+	    String answer = format(gptService.callGptApi(postDto.getContent()));
+		
+		return answer; // 요약 결과 출력
 	}
-	
-//
-//	@GetMapping("/read")
-//	public void read(@RequestParam(name = "no") int postid, Model model) {
-//		
-//		// 일단 클릭하면 조회수 증가
-//		postservice.viewcount(postid);
-//		// postid로 유저 아이디 찾기
-//		PostDto postDto = postservice.read(postid);
-//		int userId = postDto.getUserid();
-//		
-//		UserDto userDto = userservice.read(userId);
-//		List<PostimgDto> postimgDto = postimgService.getPostImages(postid);		
-//		
-//		model.addAttribute("postDto", postDto);
-//		model.addAttribute("userDto", userDto);
-//		model.addAttribute("postimgDto", postimgDto);
-//	}
 	
 
 	  @GetMapping("/read")
@@ -92,7 +72,7 @@ public class PostController {
 
 	            return "post/read";
 	        } catch (Exception e) {
-	            return "error/403";  // 예외 발생 시
+	            return "error/403";
 	        }
 	    }
 

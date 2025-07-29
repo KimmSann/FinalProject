@@ -23,7 +23,8 @@ public class User  {
     private String email;
     private String password;
     private String nickname;
-
+    
+    @Column(columnDefinition = "TEXT")
     private String profileimg;
 
     private String role ;

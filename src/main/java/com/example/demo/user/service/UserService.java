@@ -20,6 +20,8 @@ public interface UserService {
     
     boolean modify(UserDto dto);
     
+    boolean isEmailTaken(String email);
+    
     
     
     

@@ -42,12 +42,15 @@
 										</div>
 
 										<!-- 이메일 -->
+										
 										<div class="d-flex flex-row align-items-center mb-4">
 											<i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
 											<div class="form-outline flex-fill mb-0">
 												<input type="email" id="email" name="email" class="form-control"
-													placeholder="example@domain.com" required />
+													placeholder="example@domain.com" required onblur="checkEmail()" />
 												<label class="form-label" for="email">이메일</label>
+												<!-- ✅ 이메일 중복 확인 메시지 -->
+												<span id="email-check-msg" style="font-size: 0.9em;"></span>
 											</div>
 										</div>
 
@@ -73,6 +76,8 @@
 
 											</div>
 										</div>
+										<div th:if="${errorMessage}" class="alert alert-danger" role="alert" style="margin-bottom: 20px;">
+										    <span th:text="${errorMessage}"></span>	</div>
 
 
 										<!-- 가입 버튼 -->
@@ -96,6 +101,33 @@
 			</div>
 		</div>
 	</section>
+	<script>
+function checkEmail() {
+	const email = document.getElementById("email").value;
+	const msgSpan = document.getElementById("email-check-msg");
+
+	if (!email) {
+		msgSpan.innerText = "";
+		return;
+	}
+
+	fetch(`/check-email?email=${encodeURIComponent(email)}`)
+		.then(response => response.json())
+		.then(isDuplicate => {
+			if (isDuplicate) {
+				msgSpan.innerText = "⚠ 이미 사용 중인 이메일입니다.";
+				msgSpan.style.color = "red";
+			} else {
+				msgSpan.innerText = "✔ 사용 가능한 이메일입니다.";
+				msgSpan.style.color = "green";
+			}
+		})
+		.catch(error => {
+			msgSpan.innerText = "이메일 확인 중 오류 발생.";
+			msgSpan.style.color = "orange";
+		});
+}
+</script>
 
 
 </body>

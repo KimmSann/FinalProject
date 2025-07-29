@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.comment.entity.Comment;
@@ -19,8 +20,11 @@ public interface CommentRepository extends JpaRepository<Comment, Integer>{
 	
 	void deleteByPost(Post post);
 
-	  @Transactional
-	    @Modifying
-	    void deleteByPostPostid(int postId);
+	 @Modifying
+	    @Transactional
+	    @Query("DELETE FROM Comment c WHERE c.post.postid = :postId")
+	    void deleteByPostPostid(@org.springframework.data.repository.query.Param("postId") int postId);
+	}
+	  
+	  
 	
-}

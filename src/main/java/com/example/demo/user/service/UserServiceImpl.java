@@ -181,6 +181,9 @@ public class UserServiceImpl implements UserService {
                 .createdate(entity.getCreatedate())
                 .build();
     }
+    public boolean isEmailTaken(String email) {
+        return userRepository.existsByEmail(email);
+    }
 
     
     @Override
@@ -192,6 +195,8 @@ public class UserServiceImpl implements UserService {
     	if(userRepository.existsById(userId)) {
     		userRepository.deleteById(userId);
     	}
+    	
+    	
     }
 
     @Override

@@ -51,7 +51,6 @@ body {
 }
 
 
-
 .tag-list .badge {
   margin-right: 0.25rem;
 }
@@ -214,13 +213,7 @@ footer {
 
     <!-- 본문 -->
     <div class="post-content">
-	<pre th:text="${postDto.content}"
-	       style="white-space: pre-wrap;
-             word-break: break-word;
-             font-family: 'NanumSquare', sans-serif;
-             font-size: 1.3rem;
-             text-indent: 2em;
-             line-height: 1.7;"></pre>
+	<pre th:text="${postDto.content}" style="font-family: 'NanumSquare', sans-serif;  font-size: 1.3rem; "></pre>
       <div th:if="${postimgDto != null}">
         <div th:each="img : ${postimgDto}">
           <img th:src="${img.storedFileName}" alt="이미지">

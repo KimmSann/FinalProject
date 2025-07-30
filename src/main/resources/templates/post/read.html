@@ -49,9 +49,7 @@ body {
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
-p {
-  text-indent: 2em;
-}
+
 
 
 .tag-list .badge {
@@ -216,7 +214,13 @@ footer {
 
     <!-- 본문 -->
     <div class="post-content">
-	<pre th:text="${postDto.content}" style="font-family: 'NanumSquare', sans-serif;  font-size: 1.3rem"></pre>
+	<pre th:text="${postDto.content}"
+	       style="white-space: pre-wrap;
+             word-break: break-word;
+             font-family: 'NanumSquare', sans-serif;
+             font-size: 1.3rem;
+             text-indent: 2em;
+             line-height: 1.7;"></pre>
       <div th:if="${postimgDto != null}">
         <div th:each="img : ${postimgDto}">
           <img th:src="${img.storedFileName}" alt="이미지">

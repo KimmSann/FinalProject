@@ -6,8 +6,96 @@
   <title>game community - 게시글 수정</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    body { padding-top: 70px; }
-    .preview-img { max-width: 300px; display: block; margin-bottom: 1rem; }
+body {
+  padding-top: 70px;
+  background-color: #f8f9fa;
+  font-family: 'NanumSquare', sans-serif;
+}
+
+h2 {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  font-weight: 800;
+  color: #343a40;
+}
+
+label.form-label {
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 0.3rem;
+}
+
+textarea.form-control {
+  min-height: 200px;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  resize: vertical;
+}
+
+input.form-control,
+textarea.form-control {
+  border-radius: 0.5rem;
+}
+
+.preview-img {
+  max-width: 300px;
+  height: auto;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+button.btn {
+  font-weight: 600;
+  padding: 0.6rem 1.5rem;
+  border-radius: 0.5rem;
+}
+
+.btn-primary {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+.btn-secondary {
+  background-color: #adb5bd;
+  border-color: #adb5bd;
+  color: #fff;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+form + form {
+  margin-top: 1.5rem;
+}
+
+footer {
+  margin-top: 4rem;
+  color: #adb5bd;
+}
+
+@media (max-width: 576px) {
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .preview-img {
+    max-width: 100%;
+  }
+
+  .btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+
+  .d-flex.justify-content-between {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}
+
   </style>
 </head>
 <body>
@@ -74,12 +162,13 @@
       <!-- 내용 -->
       <div class="mb-3">
         <label for="content" class="form-label">내용</label>
-        <textarea class="form-control" id="content" name="content" rows="5">[[ ${ postDto.content } ]]</textarea>
+        <!-- 크기 변경 -->
+        <textarea class="form-control" id="content" name="content">[[ ${ postDto.content } ]]</textarea>
       </div>
 
       <!-- 기존 이미지 미리보기 -->
       <!-- 이미지가 없을 수 있으니 그거 처리 -->
-<!-- 기존 이미지 미리보기 -->
+	<!-- 기존 이미지 미리보기 -->
 	<div class="mb-3">
 	  <label class="form-label">현재 이미지</label><br>
 	
@@ -90,7 +179,7 @@
 	    </div>
 	  </div>
 	
-	  <!-- 이미지가 없으면 placeholder 출력 -->
+	  <!-- 이미지가 없으면 placeholder 출력 지워도 되는 부분인듯 -->
 	  <div th:if="${postimgDto == null or postimgDto.isEmpty()}">
 	    <img src="https://hyunjaebucket.s3.ap-northeast-2.amazonaws.com/%EC%9D%B4%EB%AF%B8%EC%A7%80%EA%B0%80+%EC%97%86%EC%8A%B5%EB%8B%88%EB%8B%A4..png"
 	     alt="기존 이미지 없음" class="img-thumbnail preview-img">

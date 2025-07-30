@@ -30,7 +30,7 @@ public class S3FileUtil {
 
 		String originFilename = file.getOriginalFilename();
 			
-		// 파일의 확장자
+		// 파일의 확장자 확장자 구분하기
 		int index = originFilename.lastIndexOf(".");
 		// .에 따라 나눔
 		String extention = originFilename.substring(index);
